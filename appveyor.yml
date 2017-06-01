@@ -14,9 +14,6 @@ environment:
   GITVERSION_REMOTE_PASSWORD:
     secure: I3rxSgF7ui96WUsoZVO2Yg==
 
-cache:
-  - packages -> **\packages.config
-
 assembly_info:
   patch: false
 
