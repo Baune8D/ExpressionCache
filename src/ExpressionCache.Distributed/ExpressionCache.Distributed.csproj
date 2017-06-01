@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <Version>1.0.0</Version>
     <Authors>Morten Larsen</Authors>
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-    <Description>Service for IDistributedCache interface.</Description>
+    <Description>ExpressionCache service for IDistributedCache interface.</Description>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/baunegaard/expressioncache.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/baunegaard/expressioncache</PackageProjectUrl>
+    <Product>ExpressionCache.Distributed</Product>
   </PropertyGroup>
 
   <ItemGroup>
