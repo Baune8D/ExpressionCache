@@ -7,7 +7,7 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <Description>Service for IDistributedCache interface.</Description>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/baunegaard/expressioncache</RepositoryUrl>
+    <RepositoryUrl>https://github.com/baunegaard/expressioncache.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/baunegaard/expressioncache</PackageProjectUrl>
   </PropertyGroup>
 

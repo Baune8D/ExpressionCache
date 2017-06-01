@@ -10,12 +10,12 @@ skip_tags: true
 image: Visual Studio 2017
 
 environment:
-  GITVERSION_REMOTE_USERNAME: saxisaps
+  GITVERSION_REMOTE_USERNAME: baunegaard
   GITVERSION_REMOTE_PASSWORD:
-    secure: 2yhMJoS2kSS/cyvQd9lmVg==
+    secure: I3rxSgF7ui96WUsoZVO2Yg==
 
 cache:
-  - src\packages -> src\**\packages.config
+  - packages -> **\packages.config
 
 assembly_info:
   patch: false
@@ -25,7 +25,7 @@ configuration:
 
 before_build:
   - cmd: nuget sources update -Name nuget.org -Source https://api.nuget.org/v3/index.json
-  - cmd: git remote set-url origin https://github.com/Saxis-ApS/expression-cache.git
+  - cmd: git remote set-url origin https://github.com/baunegaard/expressioncache.git
 
 build_script:
   - ps: .\build.ps1
