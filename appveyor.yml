@@ -1,0 +1,33 @@
+﻿version: '{build}'
+
+branches:
+  only:
+    - master
+    - /pull\/.+\/merge/
+
+skip_tags: true
+
+image: Visual Studio 2017
+
+environment:
+  GITVERSION_REMOTE_USERNAME: saxisaps
+  GITVERSION_REMOTE_PASSWORD:
+    secure: 2yhMJoS2kSS/cyvQd9lmVg==
+
+cache:
+  - src\packages -> src\**\packages.config
+
+assembly_info:
+  patch: false
+
+configuration:
+  - Release
+
+before_build:
+  - cmd: nuget sources update -Name nuget.org -Source https://api.nuget.org/v3/index.json
+  - cmd: git remote set-url origin https://github.com/Saxis-ApS/expression-cache.git
+
+build_script:
+  - ps: .\build.ps1
+
+test: off
