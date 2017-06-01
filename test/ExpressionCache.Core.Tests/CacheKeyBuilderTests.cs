@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using ExpressionCache.Core.Tests.TestHelpers;
 using Shouldly;
@@ -49,7 +50,7 @@ namespace ExpressionCache.Core.Tests
         [Fact]
         public void By_Double_ShouldBeCacheKeyString()
         {
-            const double number = 5.52;
+            const double number = 5.5;
             var key = _cacheKeyBuilder.By(number).ToString();
             key.ShouldBe(CacheKeyHelper.Format(number.ToString(CultureInfo.InvariantCulture)));
         }
@@ -57,9 +58,29 @@ namespace ExpressionCache.Core.Tests
         [Fact]
         public void By_String_ShouldBeCacheKeyString()
         {
-            const string text = "testing";
+            const string text = "test";
             var key = _cacheKeyBuilder.By(text).ToString();
             key.ShouldBe(CacheKeyHelper.Format(text));
+        }
+
+        [Fact]
+        public void By_Object_ShouldBeCacheKeyString()
+        {
+            const int number = 5;
+            const string text = "test";
+            var obj = new CacheObject(number, text);
+            var key = _cacheKeyBuilder.By(obj).ToString();
+            key.ShouldBe(CacheKeyHelper.Format(number) + CacheKeyHelper.Format(text));
+        }
+
+        [Fact]
+        public void By_List_ShouldBeCacheKeyString()
+        {
+            const string text1 = "test1";
+            const string text2 = "test2";
+            var list = new List<string> { text1, text2 };
+            var key = _cacheKeyBuilder.By(list).ToString();
+            key.ShouldBe(CacheKeyHelper.Format(text1) + CacheKeyHelper.Format(text2));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ExpressionCache.Core.Tests.TestHelpers;
 using Moq;
 using Shouldly;
@@ -81,6 +82,15 @@ namespace ExpressionCache.Core.Tests
                     CacheKeyHelper.Format(parameterOne) +
                     CacheKeyHelper.Format(parameterTwo)
                 );
+            }
+        }
+
+        [Fact]
+        public void GetKey_NonFunction_ShouldThrowArgumentException()
+        {
+            using (var fixture = new ExpressionCacheBaseFixture())
+            {
+                Should.Throw<ArgumentException>(() => fixture.ExpressionCacheBase.GetKey(() => 1 + 2));
             }
         }
 
