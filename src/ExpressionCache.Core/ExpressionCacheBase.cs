@@ -68,8 +68,6 @@ namespace ExpressionCache.Core
 
         private ExpressionResult ParseExpression(LambdaExpression expression)
         {
-            if (expression == null) throw new ArgumentNullException(nameof(expression));
-
             var methodCall = expression.Body as MethodCallExpression;
             if (methodCall == null) throw new ArgumentException("expression: body must be a method call");
 

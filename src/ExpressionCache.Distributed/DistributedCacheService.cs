@@ -74,22 +74,22 @@ namespace ExpressionCache.Distributed
             return (await Provider.GetAsync<TResult>(GetKey(expression))).Content;
         }
 
-        public async Task<IEnumerable<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions)
+        public async Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions)
         {
             return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList());
         }
 
-        public async Task<IEnumerable<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions)
+        public async Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions)
         {
             return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList());
         }
 
-        private async Task<IEnumerable<TResult>> GetManyBaseAsync<TResult>(List<string> cacheKeyList)
+        private async Task<List<TResult>> GetManyBaseAsync<TResult>(List<string> cacheKeyList)
         {
             var tasks = new List<Task<CacheResult<TResult>>>();
             cacheKeyList.ForEach(key => tasks.Add(Provider.GetAsync<TResult>(key)));
             var result = await Task.WhenAll(tasks);
-            return result.Select(r => r.Content);
+            return result.Select(r => r.Content).ToList();
         }
 
         public void Set<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)

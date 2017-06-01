@@ -23,8 +23,8 @@ namespace ExpressionCache.Distributed
         Task<TResult> GetAsync<TResult>(Expression<Func<TResult>> expression);
         Task<TResult> GetAsync<TResult>(Expression<Func<Task<TResult>>> expression);
 
-        Task<IEnumerable<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions);
-        Task<IEnumerable<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions);
+        Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions);
+        Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions);
 
         void Set<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry);
         void Set<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry);
