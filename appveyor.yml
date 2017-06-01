@@ -9,11 +9,6 @@ skip_tags: true
 
 image: Visual Studio 2017
 
-environment:
-  GITVERSION_REMOTE_USERNAME: baunegaard
-  GITVERSION_REMOTE_PASSWORD:
-    secure: I3rxSgF7ui96WUsoZVO2Yg==
-
 assembly_info:
   patch: false
 
