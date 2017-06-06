@@ -12,7 +12,6 @@ var configuration = Argument("configuration", "Release");
 //////////////////////////////////////////////////////////////////////
 
 var solutionFile = "./ExpressionCache.sln";
-
 string semVersion = null;
 
 //////////////////////////////////////////////////////////////////////
@@ -66,7 +65,7 @@ Task("Build")
 	});
 });
 
-Task("Unit-Tests")
+Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
@@ -83,7 +82,7 @@ Task("Unit-Tests")
 Task("Package")
 	.IsDependentOn("Clean")
 	.IsDependentOn("Version")
-	.IsDependentOn("Unit-Tests")
+	.IsDependentOn("Test")
     .Does(() =>
 {
 	foreach (var file in GetFiles("./src/*/*.csproj"))
@@ -103,11 +102,28 @@ Task("Upload-Artifacts")
     .IsDependentOn("Package")
     .Does(() =>
 {
-	foreach (var file in GetFiles("./artifacts/*"))
+	foreach (var file in GetFiles("./artifacts/*.nupkg"))
 	{
 		if (AppVeyor.IsRunningOnAppVeyor)
 		{
 			AppVeyor.UploadArtifact(file);
+		}
+	}
+});
+
+Task("NuGet-Push")
+    .IsDependentOn("Package")
+    .Does(() =>
+{
+	if (AppVeyor.IsRunningOnAppVeyor)
+	{
+		if (EnvironmentVariable("APPVEYOR_REPO_TAG") == "true")
+		{
+			NuGetPush(GetFiles("./artifacts/*.nupkg"), new NuGetPushSettings 
+			{
+				Source = "https://www.myget.org/F/baunegaard/api/v2/package",
+				ApiKey = EnvironmentVariable("MYGET_API_KEY")
+			});
 		}
 	}
 });
@@ -139,7 +155,8 @@ void DeleteDirectoryIfExists(string path)
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Upload-Artifacts");
+    .IsDependentOn("Upload-Artifacts")
+	.IsDependentOn("NuGet-Push");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

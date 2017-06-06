@@ -7,6 +7,10 @@ branches:
 
 image: Visual Studio 2017
 
+environment:
+  MYGET_API_KEY:
+    secure: 78qy8e6pKfJlQV7RAG5tJOWegzXpjASkUs3aFdVBoPYA5gi6+mWdjbuAmNa5OQPe
+
 nuget:
   disable_publish_on_pr: true
 
