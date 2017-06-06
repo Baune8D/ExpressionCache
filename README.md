@@ -22,7 +22,7 @@ class SampleService
         _sampleRepository = sampleRepository;
     }
 
-    public async Task<AdvertModel> GetAsync(int entityId, CacheAction cacheAction = CacheAction.Invoke)
+    public async Task<EntityModel> GetAsync(int entityId, CacheAction cacheAction = CacheAction.Invoke)
     {
         if (cacheAction != CacheAction.Bypass)
         {
@@ -121,7 +121,7 @@ public class SampleService
         if (await _sampleRepository.UpdateAsync(entity))
         {
             // Overwrite cached entity with updated one.
-            return await GetAsync(advert.Id, CacheAction.Overwrite) != null;
+            return await GetAsync(entity.Id, CacheAction.Overwrite) != null;
         }
         return false;
     }
@@ -137,7 +137,7 @@ public class SampleService
         return false;
     }
 
-    public async Task<AdvertModel> GetAsync(int entityId, CacheAction cacheAction = CacheAction.Invoke)
+    public async Task<EntityModel> GetAsync(int entityId, CacheAction cacheAction = CacheAction.Invoke)
     {
         if (cacheAction != CacheAction.Bypass)
         {
