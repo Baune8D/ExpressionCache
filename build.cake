@@ -89,6 +89,8 @@ Task("Package")
 	{
 		MSBuild(file, new MSBuildSettings()
 			.SetConfiguration(configuration)
+			.WithProperty("IncludeSymbols", "true")
+			.WithProperty("IncludeSource", "true")
 			.WithProperty("Version", semVersion)
 			.WithTarget("pack")
 		);
@@ -115,15 +117,26 @@ Task("NuGet-Push")
     .IsDependentOn("Package")
     .Does(() =>
 {
-	if (AppVeyor.IsRunningOnAppVeyor)
+	if (AppVeyor.IsRunningOnAppVeyor && EnvironmentVariable("APPVEYOR_REPO_TAG") == "true")
 	{
-		if (EnvironmentVariable("APPVEYOR_REPO_TAG") == "true")
+		foreach (var file in GetFiles("./artifacts/*.nupkg"))
 		{
-			NuGetPush(GetFiles("./artifacts/*.nupkg"), new NuGetPushSettings 
+			if (file.ToString().Contains(".symbols.nupkg"))
 			{
-				Source = "https://www.myget.org/F/baunegaard/api/v2/package",
-				ApiKey = EnvironmentVariable("MYGET_API_KEY")
-			});
+				NuGetPush(file, new NuGetPushSettings 
+				{
+					Source = "https://www.myget.org/F/baunegaard/symbols/api/v2/package",
+					ApiKey = EnvironmentVariable("MYGET_API_KEY")
+				});
+			}
+			else
+			{
+				NuGetPush(file, new NuGetPushSettings 
+				{
+					Source = "https://www.myget.org/F/baunegaard/api/v2/package",
+					ApiKey = EnvironmentVariable("MYGET_API_KEY")
+				});
+			}
 		}
 	}
 });
