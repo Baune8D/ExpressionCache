@@ -1,6 +1,6 @@
 # ExpressionCache
 [![Build status](https://ci.appveyor.com/api/projects/status/qmxfk6hhua5ev2cn?svg=true)](https://ci.appveyor.com/project/baunegaard/expressioncache)  
-NuGet project feed available here: [https://ci.appveyor.com/nuget/expressioncache-qrdcy103h86t](https://ci.appveyor.com/nuget/expressioncache-qrdcy103h86t)
+NuGet feed: [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)
 
 Inspired from this article [http://www.codeducky.org/robust-net-caching/](http://www.codeducky.org/robust-net-caching/)
 
