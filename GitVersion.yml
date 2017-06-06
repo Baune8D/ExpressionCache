@@ -1,4 +1,6 @@
 mode: Mainline
-branches: {}
+branches:
+  master:
+    tag: beta
 ignore:
   sha: []
