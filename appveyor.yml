@@ -5,9 +5,10 @@ branches:
     - master
     - /pull\/.+\/merge/
 
-skip_tags: true
-
 image: Visual Studio 2017
+
+nuget:
+  disable_publish_on_pr: true
 
 assembly_info:
   patch: false
@@ -23,3 +24,5 @@ build_script:
   - ps: .\build.ps1
 
 test: off
+
+deploy: off
