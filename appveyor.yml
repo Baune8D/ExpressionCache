@@ -20,7 +20,7 @@ configuration:
   - Release
 
 before_build:
-  - cmd: git remote set-url origin https://github.com/baunegaard/expressioncache.git
+  - cmd: git remote set-url origin https://github.com/Baune8D/expressioncache.git
 
 build_script:
   - ps: .\build.ps1
