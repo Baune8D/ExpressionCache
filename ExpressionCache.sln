@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionCache.Core", "src\ExpressionCache.Core\ExpressionCache.Core.csproj", "{95FC9AF3-A1C9-409E-A5BB-48BAD47A8EDF}"
 EndProject
@@ -13,14 +13,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		build.cake = build.cake
+		build.ps1 = build.ps1
 		GitVersion.yml = GitVersion.yml
 		LICENSE.txt = LICENSE.txt
+		NuGet.Config = NuGet.Config
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionCache.Core.Tests", "test\ExpressionCache.Core.Tests\ExpressionCache.Core.Tests.csproj", "{C9B64175-438C-45CF-813D-080668803BF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionCache.Core.Tests", "test\ExpressionCache.Core.Tests\ExpressionCache.Core.Tests.csproj", "{C9B64175-438C-45CF-813D-080668803BF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionCache.Distributed.Tests", "test\ExpressionCache.Distributed.Tests\ExpressionCache.Distributed.Tests.csproj", "{E1933559-16AE-4A3F-B0B0-320EAF8566C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionCache.Distributed.Tests", "test\ExpressionCache.Distributed.Tests\ExpressionCache.Distributed.Tests.csproj", "{E1933559-16AE-4A3F-B0B0-320EAF8566C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F72E828C-F7DE-4017-98C6-DA80131AF0D9}"
 EndProject
