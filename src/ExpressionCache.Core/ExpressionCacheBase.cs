@@ -39,13 +39,14 @@ namespace ExpressionCache.Core
             if (expiry == null) throw new ArgumentNullException(nameof(expiry));
             var expressionResult = ParseExpression(expression);
 
-            if (cacheAction != CacheAction.Overwrite)
+            if (cacheAction == CacheAction.Invoke)
             {
                 var cachedResult = Provider.Get<TResult>(expressionResult.CacheKey);
                 if (cachedResult.Success) return cachedResult.Content;
             }
 
             var computedValue = (TResult) expressionResult.Method.Invoke(expressionResult.Instance, expressionResult.Arguments);
+            if (cacheAction == CacheAction.Bypass) return computedValue;
             if (computedValue != null) Provider.Set(expressionResult.CacheKey, computedValue, expiry);
             return computedValue;
         }
@@ -55,13 +56,14 @@ namespace ExpressionCache.Core
             if (expiry == null) throw new ArgumentNullException(nameof(expiry));
             var expressionResult = ParseExpression(expression);
 
-            if (cacheAction != CacheAction.Overwrite)
+            if (cacheAction == CacheAction.Invoke)
             {
                 var cachedResult = await Provider.GetAsync<TResult>(expressionResult.CacheKey);
                 if (cachedResult.Success) return cachedResult.Content;
             }
 
             var computedValue = await (Task<TResult>) expressionResult.Method.Invoke(expressionResult.Instance, expressionResult.Arguments);
+            if (cacheAction == CacheAction.Bypass) return computedValue;
             if (computedValue != null) await Provider.SetAsync(expressionResult.CacheKey, computedValue, expiry);
             return computedValue;
         }
