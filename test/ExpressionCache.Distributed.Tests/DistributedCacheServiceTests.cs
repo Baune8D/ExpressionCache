@@ -18,7 +18,6 @@ namespace ExpressionCache.Distributed.Tests
         private readonly MemoryDistributedCache _memoryDistributedCache;
         private readonly IDistributedCacheService _distributedCacheService;
 
-        private const string Key = "TestKey";
         private const string Value = "TestValue";
 
         public DistributedCacheServiceTests(TestFunctionsFixture testFunctions)
