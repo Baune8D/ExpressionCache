@@ -8,8 +8,6 @@ branches:
 image: Visual Studio 2017
 
 environment:
-  CODECOV_TOKEN:
-    secure: I7bieXWtobeo2d40BMek/GSjy5Z0Wihr1dZ+G8qujzKpGyzxxaR7zzPrWteRfkSK
   MYGET_API_KEY:
     secure: 78qy8e6pKfJlQV7RAG5tJOWegzXpjASkUs3aFdVBoPYA5gi6+mWdjbuAmNa5OQPe
 
@@ -26,5 +24,10 @@ build_script:
   - ps: .\build.ps1
 
 test: off
+
+after_test:
+ - "SET PATH=C:\\Python36;C:\\Python36\\Scripts;%PATH%"
+ - pip install codecov
+ - codecov -f "coverage.xml"
 
 deploy: off

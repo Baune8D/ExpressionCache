@@ -1,9 +1,6 @@
 #tool "nuget:?package=GitVersion.CommandLine&prerelease"
 #tool "nuget:?package=OpenCover"
-#tool "nuget:?package=Codecov"
 #tool "nuget:?package=ReportGenerator"
-
-#addin "nuget:?package=Cake.Codecov"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -17,7 +14,7 @@ var configuration = Argument("configuration", "Release");
 //////////////////////////////////////////////////////////////////////
 
 var solutionFile = "./ExpressionCache.sln";
-var coverageResult = "./TestResult.xml";
+var coverageResult = "./coverage.xml";
 
 string[] coverageFilters = 
 {
@@ -108,11 +105,6 @@ Task("Test")
 			});
 		},
 		coverageResult, settings);
-	}
-
-	if (AppVeyor.IsRunningOnAppVeyor)
-	{
-		Codecov(coverageResult, EnvironmentVariable("CODECOV_TOKEN"));
 	}
 });
 
