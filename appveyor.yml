@@ -26,7 +26,7 @@ build_script:
 after_build:
   - "SET PATH=C:\\Python36;C:\\Python36\\Scripts;%PATH%"
   - pip install codecov
-  - codecov -f "coverage.xml"
+  - codecov -f "coverage.xml -X gcov"
 
 test: off
 
