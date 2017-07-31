@@ -1,5 +1,7 @@
 # ExpressionCache
-[![Build status](https://ci.appveyor.com/api/projects/status/qmxfk6hhua5ev2cn?svg=true)](https://ci.appveyor.com/project/baunegaard/expressioncache)  
+[![Build status](https://ci.appveyor.com/api/projects/status/qmxfk6hhua5ev2cn?svg=true)](https://ci.appveyor.com/project/Baune8D/expressioncache)
+[![codecov](https://codecov.io/gh/Baune8D/expressioncache/branch/master/graph/badge.svg)](https://codecov.io/gh/Baune8D/expressioncache)
+
 NuGet feed: [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)
 
 Inspired from this article [http://www.codeducky.org/robust-net-caching/](http://www.codeducky.org/robust-net-caching/)
