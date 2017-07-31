@@ -1,11 +1,11 @@
 ﻿namespace ExpressionCache.Core.Tests.TestHelpers
 {
-    public class CacheObject : ICacheKey
+    public class CacheableObject : ICacheKey
     {
         public int Parameter1 { get; set; }
         public string Parameter2 { get; set; }
 
-        public CacheObject(int parameter1, string parameter2)
+        public CacheableObject(int parameter1, string parameter2)
         {
             Parameter1 = parameter1;
             Parameter2 = parameter2;

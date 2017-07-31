@@ -64,13 +64,20 @@ namespace ExpressionCache.Core.Tests
         }
 
         [Fact]
-        public void By_Object_ShouldBeCacheKeyString()
+        public void By_CacheableObject_ShouldBeCacheKeyString()
         {
             const int number = 5;
             const string text = "test";
-            var obj = new CacheObject(number, text);
+            var obj = new CacheableObject(number, text);
             var key = _cacheKeyBuilder.By(obj).ToString();
             key.ShouldBe(CacheKeyHelper.Format(number) + CacheKeyHelper.Format(text));
+        }
+
+        [Fact]
+        public void By_NonCacheableObject_ShouldThrowArgumentException()
+        {
+            var obj = new NonCacheableObject();
+            Should.Throw<ArgumentException>(() => _cacheKeyBuilder.By(obj));
         }
 
         [Fact]

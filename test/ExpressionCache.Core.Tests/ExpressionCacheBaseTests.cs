@@ -127,7 +127,7 @@ namespace ExpressionCache.Core.Tests
         }
 
         [Fact]
-        public void InvokeCache_ResultNotInCache_ShouldReturnNewResult()
+        public void InvokeCache_ResultNotInCache_ShouldCacheAndReturnResult()
         {
             using (var fixture = new ExpressionCacheBaseFixture())
             {
@@ -143,7 +143,7 @@ namespace ExpressionCache.Core.Tests
         }
 
         [Fact]
-        public async Task InvokeCacheAsync_ResultNotInCache_ShouldReturnNewResult()
+        public async Task InvokeCacheAsync_ResultNotInCache_ShouldCacheAndReturnResult()
         {
             using (var fixture = new ExpressionCacheBaseFixture())
             {
@@ -159,7 +159,39 @@ namespace ExpressionCache.Core.Tests
         }
 
         [Fact]
-        public void InvokeCache_Overwrite_ShouldReturnFunctionResult()
+        public void InvokeCache_NullFunction_ShouldNotCacheNull()
+        {
+            using (var fixture = new ExpressionCacheBaseFixture())
+            {
+                fixture.SetCacheProviderGetFailure();
+                var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithoutParameters());
+
+                var result = fixture.ExpressionCacheBase.InvokeCache(() => _testFunctions.NullFunctionWithoutParameters(), ExpressionCacheBaseFixture.TimeSpan, CacheAction.Invoke);
+
+                result.ShouldBeNull();
+                fixture.CacheProviderMock.Verify(m => m.Get<string>(key), Times.Never);
+                fixture.CacheProviderMock.Verify(m => m.Set(key, result, ExpressionCacheBaseFixture.TimeSpan), Times.Never);
+            }
+        }
+
+        [Fact]
+        public async Task InvokeCacheAsync_NullFunction_ShouldNotCacheNull()
+        {
+            using (var fixture = new ExpressionCacheBaseFixture())
+            {
+                fixture.SetCacheProviderGetAsyncFailure();
+                var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
+
+                var result = await fixture.ExpressionCacheBase.InvokeCacheAsync(() => _testFunctions.NullFunctionWithoutParametersAsync(), ExpressionCacheBaseFixture.TimeSpan, CacheAction.Invoke);
+
+                result.ShouldBeNull();
+                fixture.CacheProviderMock.Verify(m => m.GetAsync<string>(key), Times.Never);
+                fixture.CacheProviderMock.Verify(m => m.SetAsync(key, result, ExpressionCacheBaseFixture.TimeSpan), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void InvokeCache_Overwrite_ShouldReturnNewValueAndCache()
         {
             using (var fixture = new ExpressionCacheBaseFixture())
             {
@@ -175,7 +207,7 @@ namespace ExpressionCache.Core.Tests
         }
 
         [Fact]
-        public async Task InvokeCacheAsync_Overwrite_ShouldReturnFunctionResult()
+        public async Task InvokeCacheAsync_Overwrite_ShouldReturnNewValueAndCache()
         {
             using (var fixture = new ExpressionCacheBaseFixture())
             {
@@ -187,6 +219,38 @@ namespace ExpressionCache.Core.Tests
                 result.ShouldBe(_testFunctions.ReturnResult);
                 fixture.CacheProviderMock.Verify(m => m.GetAsync<string>(key), Times.Never);
                 fixture.CacheProviderMock.Verify(m => m.SetAsync(key, result, ExpressionCacheBaseFixture.TimeSpan), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void InvokeCache_Bypass_ShouldReturnNewValueAndCache()
+        {
+            using (var fixture = new ExpressionCacheBaseFixture())
+            {
+                fixture.SetCacheProviderGetSuccess();
+                var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithoutParameters());
+
+                var result = fixture.ExpressionCacheBase.InvokeCache(() => _testFunctions.FunctionWithoutParameters(), ExpressionCacheBaseFixture.TimeSpan, CacheAction.Bypass);
+
+                result.ShouldBe(_testFunctions.ReturnResult);
+                fixture.CacheProviderMock.Verify(m => m.Get<string>(key), Times.Never);
+                fixture.CacheProviderMock.Verify(m => m.Set(key, result, ExpressionCacheBaseFixture.TimeSpan), Times.Never);
+            }
+        }
+
+        [Fact]
+        public async Task InvokeCacheAsync_Bypass_ShouldReturnNewValueAndCache()
+        {
+            using (var fixture = new ExpressionCacheBaseFixture())
+            {
+                fixture.SetCacheProviderGetAsyncSuccess();
+                var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
+
+                var result = await fixture.ExpressionCacheBase.InvokeCacheAsync(() => _testFunctions.FunctionWithoutParametersAsync(), ExpressionCacheBaseFixture.TimeSpan, CacheAction.Bypass);
+
+                result.ShouldBe(_testFunctions.ReturnResult);
+                fixture.CacheProviderMock.Verify(m => m.GetAsync<string>(key), Times.Never);
+                fixture.CacheProviderMock.Verify(m => m.SetAsync(key, result, ExpressionCacheBaseFixture.TimeSpan), Times.Never);
             }
         }
     }

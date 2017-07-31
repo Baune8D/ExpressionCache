@@ -8,6 +8,11 @@ namespace ExpressionCache.Core.Tests.TestHelpers
 
         public readonly string ReturnResult = "ReturnResult";
 
+        public string NullFunctionWithoutParameters()
+        {
+            return null;
+        }
+
         public string FunctionWithoutParameters()
         {
             return ReturnResult;
@@ -23,12 +28,17 @@ namespace ExpressionCache.Core.Tests.TestHelpers
             return ReturnResult;
         }
 
-        public string FunctionWithObjectParameter(CacheObject obj)
+        public string FunctionWithObjectParameter(CacheableObject obj)
         {
             return ReturnResult;
         }
 
         #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
+        public async Task<string> NullFunctionWithoutParametersAsync()
+        {
+            return null;
+        }
 
         public async Task<string> FunctionWithoutParametersAsync()
         {
@@ -45,7 +55,7 @@ namespace ExpressionCache.Core.Tests.TestHelpers
             return ReturnResult;
         }
 
-        public string FunctionWithObjectParameterAsync(CacheObject obj)
+        public string FunctionWithObjectParameterAsync(CacheableObject obj)
         {
             return ReturnResult;
         }
