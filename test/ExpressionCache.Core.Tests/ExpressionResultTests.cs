@@ -6,7 +6,7 @@ using Xunit;
 
 namespace ExpressionCache.Core.Tests
 {
-    public class ExpressionResultTests : ICollectionFixture<TestFunctionsFixture>
+    public class ExpressionResultTests : IClassFixture<TestFunctionsFixture>
     {
         private readonly TestFunctionsFixture _testFunctions;
 
