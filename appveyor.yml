@@ -18,7 +18,6 @@ configuration:
   - Release
 
 before_build:
-  - cmd: nuget sources update -Name nuget.org -Source https://api.nuget.org/v3/index.json
   - cmd: git remote set-url origin https://github.com/baunegaard/expressioncache.git
 
 build_script:
