@@ -23,11 +23,11 @@ configuration:
 build_script:
   - ps: .\build.ps1
 
-test: off
+after_build:
+  - "SET PATH=C:\\Python36;C:\\Python36\\Scripts;%PATH%"
+  - pip install codecov
+  - codecov -f "coverage.xml"
 
-after_test:
- - "SET PATH=C:\\Python36;C:\\Python36\\Scripts;%PATH%"
- - pip install codecov
- - codecov -f "coverage.xml"
+test: off
 
 deploy: off
