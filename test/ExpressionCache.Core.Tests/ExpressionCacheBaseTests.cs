@@ -7,8 +7,7 @@ using Xunit;
 
 namespace ExpressionCache.Core.Tests
 {
-    [Collection("HelperCollection")]
-    public class ExpressionCacheBaseTests
+    public class ExpressionCacheBaseTests : IClassFixture<TestFunctionsFixture>
     {
         private readonly TestFunctionsFixture _testFunctions;
 
