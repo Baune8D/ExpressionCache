@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
+using Microsoft.Extensions.Options;
 
 namespace ExpressionCache.Distributed.Tests
 {
@@ -13,7 +14,9 @@ namespace ExpressionCache.Distributed.Tests
         public void AddDistributedExpressionCache_IServiceCollection_ShouldResolveService()
         {
             IServiceCollection services = new ServiceCollection();
-            var cache = new MemoryDistributedCache(new MemoryCache(new MemoryCacheOptions()));
+
+            var options = new OptionsWrapper<MemoryDistributedCacheOptions>(new MemoryDistributedCacheOptions());
+            var cache = new MemoryDistributedCache(options);
 
             services.AddSingleton<IDistributedCache>(cache);
             services.AddDistributedExpressionCache();

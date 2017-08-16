@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
+using Microsoft.Extensions.Options;
 
 namespace ExpressionCache.Distributed.Tests
 {
@@ -23,7 +24,9 @@ namespace ExpressionCache.Distributed.Tests
         public DistributedCacheServiceTests(TestFunctionsFixture testFunctions)
         {
             _testFunctions = testFunctions;
-            _memoryDistributedCache = new MemoryDistributedCache(new MemoryCache(new MemoryCacheOptions()));
+
+            var options = new OptionsWrapper<MemoryDistributedCacheOptions>(new MemoryDistributedCacheOptions());
+            _memoryDistributedCache = new MemoryDistributedCache(options);
             _distributedCacheService = new DistributedCacheService(_memoryDistributedCache);
         }
 
