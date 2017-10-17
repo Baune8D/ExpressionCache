@@ -24,14 +24,14 @@ namespace ExpressionCache.Core.Tests
                 var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithoutParameters());
                 var asyncKey = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
-                key.ShouldBe(
+                key.ShouldBe(CacheKeyHelper.Prefix(
                     CacheKeyHelper.Format(_testFunctions.ClassName) +
                     CacheKeyHelper.Format(nameof(_testFunctions.FunctionWithoutParameters))
-                );
-                asyncKey.ShouldBe(
+                ));
+                asyncKey.ShouldBe(CacheKeyHelper.Prefix(
                     CacheKeyHelper.Format(_testFunctions.ClassName) +
                     CacheKeyHelper.Format(nameof(_testFunctions.FunctionWithoutParametersAsync))
-                );
+                ));
             }
         }
 
@@ -45,16 +45,16 @@ namespace ExpressionCache.Core.Tests
                 var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithOneParameter(parameter));
                 var asyncKey = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithOneParameterAsync(parameter));
 
-                key.ShouldBe(
+                key.ShouldBe(CacheKeyHelper.Prefix(
                     CacheKeyHelper.Format(_testFunctions.ClassName) +
                     CacheKeyHelper.Format(nameof(_testFunctions.FunctionWithOneParameter)) +
                     CacheKeyHelper.Format(parameter)
-                );
-                asyncKey.ShouldBe(
+                ));
+                asyncKey.ShouldBe(CacheKeyHelper.Prefix(
                     CacheKeyHelper.Format(_testFunctions.ClassName) +
                     CacheKeyHelper.Format(nameof(_testFunctions.FunctionWithOneParameterAsync)) +
                     CacheKeyHelper.Format(parameter)
-                );
+                ));
             }
         }
 
@@ -69,18 +69,18 @@ namespace ExpressionCache.Core.Tests
                 var key = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithTwoParameters(parameterOne, parameterTwo));
                 var asyncKey = fixture.ExpressionCacheBase.GetKey(() => _testFunctions.FunctionWithTwoParametersAsync(parameterOne, parameterTwo));
 
-                key.ShouldBe(
+                key.ShouldBe(CacheKeyHelper.Prefix(
                     CacheKeyHelper.Format(_testFunctions.ClassName) +
                     CacheKeyHelper.Format(nameof(_testFunctions.FunctionWithTwoParameters)) +
                     CacheKeyHelper.Format(parameterOne) +
                     CacheKeyHelper.Format(parameterTwo)
-                );
-                asyncKey.ShouldBe(
+                ));
+                asyncKey.ShouldBe(CacheKeyHelper.Prefix(
                     CacheKeyHelper.Format(_testFunctions.ClassName) +
                     CacheKeyHelper.Format(nameof(_testFunctions.FunctionWithTwoParametersAsync)) +
                     CacheKeyHelper.Format(parameterOne) +
                     CacheKeyHelper.Format(parameterTwo)
-                );
+                ));
             }
         }
 

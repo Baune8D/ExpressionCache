@@ -8,6 +8,8 @@ namespace ExpressionCache.Core
 {
     public abstract class ExpressionCacheBase : IExpressionCacheBase
     {
+        public const string CachePrefix = "ExprCache";
+
         private readonly IMemoryCache _internalCache;
 
         protected IExpressionCacheProvider Provider { get; }
@@ -127,7 +129,7 @@ namespace ExpressionCache.Core
                 .By(methodInfo.Name)
                 .By(methodInfo.GetGenericArguments());
 
-            return keyBuilder.ToString();
+            return CachePrefix + keyBuilder;
         }
 
         private static string GenerateCacheKey(string baseKey, object[] arguments)
