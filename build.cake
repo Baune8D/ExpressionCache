@@ -58,7 +58,6 @@ Task("Build")
 {
 	Information("Building solution");
 
-	DotNetCoreRestore(solutionFile);
 	DotNetCoreBuild(solutionFile, new DotNetCoreBuildSettings
     {
         Configuration = configuration
