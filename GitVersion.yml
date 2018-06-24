@@ -1,7 +1,7 @@
+next-version: 1.0.0
 branches:
   master:
-    tag: beta
-  develop:
-    tag: alpha
+    mode: ContinuousDeployment
+    tag: build
 ignore:
   sha: []

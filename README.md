@@ -2,9 +2,14 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/0abskdimkpe1m558?svg=true)](https://ci.appveyor.com/project/Baune8D/expressioncache)
 [![codecov](https://codecov.io/gh/Baune8D/expressioncache/branch/master/graph/badge.svg)](https://codecov.io/gh/Baune8D/expressioncache)
 
-NuGet feed: [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)
+**Available on NuGet:** [https://www.nuget.org/packages?q=expressioncache](https://www.nuget.org/packages?q=expressioncache)  
+**Dev feed:** [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)  
 
 Inspired from this article [http://www.codeducky.org/robust-net-caching/](http://www.codeducky.org/robust-net-caching/)
+
+## Table of Contents
+1. [ExpressionCache.Core](#expressionCache.core)
+2. [ExpressionCache.Distributed](#expressionCache.distributed)
 
 ## ExpressionCache.Core
 
@@ -13,12 +18,12 @@ The cache key will be a combination of class name, function name and parameter v
 
 The following code snippet is the heart of the library:
 ```csharp
-public class SampleService : ISampleService
+public class SampleService
 {
     private readonly IDistributedCacheService _cacheService;
-    private readonly ISampleRepository _sampleRepository;
+    private readonly SampleRepository _sampleRepository;
 
-    public SampleService(IDistributedCacheService cacheService, ISampleRepository sampleRepository)
+    public SampleService(IDistributedCacheService cacheService, SampleRepository sampleRepository)
     {
         _cacheService = cacheService;
         _sampleRepository = sampleRepository;
@@ -96,12 +101,12 @@ You can now inject IDistributedCacheService using DI into you code.
 
 ### Full service example
 ```csharp
-public class SampleService : ISampleService
+public class SampleService
 {
     private readonly IDistributedCacheService _cacheService;
-    private readonly ISampleRepository _sampleRepository;
+    private readonly SampleRepository _sampleRepository;
 
-    public SampleService(IDistributedCacheService cacheService, ISampleRepository sampleRepository)
+    public SampleService(IDistributedCacheService cacheService, SampleRepository sampleRepository)
     {
         _cacheService = cacheService;
         _sampleRepository = sampleRepository;

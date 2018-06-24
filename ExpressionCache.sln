@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		build.cake = build.cake
 		build.ps1 = build.ps1
+		build.sh = build.sh
 		GitVersion.yml = GitVersion.yml
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
@@ -30,6 +31,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E2EE2ECC-2D04-461E-AF3D-86E66B7CEF70}"
 	ProjectSection(SolutionItems) = preProject
 		tools\packages.config = tools\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{DE84B09E-D95B-4FA5-B0F3-BAE35F5F38FA}"
+	ProjectSection(SolutionItems) = preProject
+		.vscode\extensions.json = .vscode\extensions.json
+		.vscode\settings.json = .vscode\settings.json
+		.vscode\tasks.json = .vscode\tasks.json
 	EndProjectSection
 EndProject
 Global
@@ -64,6 +72,7 @@ Global
 		{C9B64175-438C-45CF-813D-080668803BF2} = {8ADE7352-D8DE-444F-BD88-92308C044F01}
 		{E1933559-16AE-4A3F-B0B0-320EAF8566C6} = {8ADE7352-D8DE-444F-BD88-92308C044F01}
 		{E2EE2ECC-2D04-461E-AF3D-86E66B7CEF70} = {0D3664A8-B03E-4BCF-839D-05B531696319}
+		{DE84B09E-D95B-4FA5-B0F3-BAE35F5F38FA} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A299EE11-0232-400D-9A3B-DC506153B286}

@@ -3,7 +3,6 @@
 branches:
   only:
     - master
-    - develop
     - /pull\/.+\/merge/
 
 image: Visual Studio 2017
@@ -11,6 +10,8 @@ image: Visual Studio 2017
 environment:
   MYGET_API_KEY:
     secure: 78qy8e6pKfJlQV7RAG5tJOWegzXpjASkUs3aFdVBoPYA5gi6+mWdjbuAmNa5OQPe
+  NUGET_API_KEY:
+    secure: HrtMfG+bwaV8vPFGEc79kcNpq8DP2S2qGcI1eX4d5RnOt9I+HoPkhpFSJ6RGnEV/
 
 assembly_info:
   patch: false
@@ -22,9 +23,10 @@ build_script:
   - ps: .\build.ps1
 
 after_build:
-  - "SET PATH=C:\\Python36;C:\\Python36\\Scripts;%PATH%"
-  - pip install codecov
-  - codecov -f "coverage.xml" -X gcov
+  - ps: |
+      $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
+      Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
+      bash codecov.sh -f "coverage.xml"
 
 test: off
 

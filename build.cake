@@ -1,6 +1,6 @@
 #tool "GitVersion.CommandLine&version=4.0.0-beta0012"
 #tool "OpenCover&version=4.6.519"
-#tool "ReportGenerator&version=3.1.1"
+#tool "ReportGenerator&version=3.1.2"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -19,7 +19,7 @@ var coverageResult = File("./coverage.xml");
 var artifactsFolder = Directory("./artifacts");
 var coverageFolder = Directory("./coverage");
 
-Func<IDirectory, bool> excludeFolders = fileSystemInfo => 
+Func<IFileSystemInfo, bool> excludeFolders = fileSystemInfo => 
 	!fileSystemInfo.Path.FullPath.Contains("/bin") &&
 	!fileSystemInfo.Path.FullPath.Contains("/obj");
 
@@ -53,21 +53,7 @@ Task("Version")
 	Information($"SemVersion is: {semVersion}");
 });
 
-Task("Restore")
-	.IsDependentOn("Version")
-    .Does(() =>
-{
-	Information("Restoring NuGet packages");
-
-	DotNetCoreRestore(solutionFile, new DotNetCoreRestoreSettings
-	{
-		MSBuildSettings = new DotNetCoreMSBuildSettings()
-			.SetVersion(semVersion)
-	});
-});
-
 Task("Build")
-	.IsDependentOn("Restore")
     .Does(() =>
 {
 	Information("Building solution");
@@ -91,7 +77,7 @@ Task("Test")
 	string[] coverageFilters = 
 	{
 		"+[ExpressionCache.*]*",
-		"-[ExpressionCache.*.Tests]*"
+		"-[ExpressionCache.*Tests]*"
 	};
 
 	var settings = new OpenCoverSettings
@@ -107,7 +93,7 @@ Task("Test")
 		settings.WithFilter(filter);
 	}
 
-	var parameters = $"--fx-version 2.0.3 -nobuild -configuration {configuration}";
+	var parameters = $"--fx-version 2.0.7 -nobuild -configuration {configuration}";
 
 	foreach (var file in GetFiles("./test/*/*.csproj", excludeFolders))
 	{
@@ -122,6 +108,7 @@ Task("Test")
 });
 
 Task("Package")
+	.IsDependentOn("Version")
 	.IsDependentOn("Test")
     .Does(() =>
 {
@@ -173,28 +160,51 @@ Task("NuGet-Push")
     .IsDependentOn("Package")
     .Does(() =>
 {
-	if (AppVeyor.IsRunningOnAppVeyor && EnvironmentVariable("APPVEYOR_REPO_TAG") == "true")
+	if (AppVeyor.IsRunningOnAppVeyor)
 	{
-		Information("Pushing artifacts to MyGet repository");
-
-		foreach (var file in GetFiles(artifactsFolder.Path + "/*.nupkg"))
+		if (EnvironmentVariable("APPVEYOR_REPO_TAG") == "true")
 		{
-			if (file.ToString().Contains(".symbols.nupkg"))
+			Information("Pushing artifacts to NuGet repository");
+
+			foreach (var file in GetFiles(artifactsFolder.Path + "/*.nupkg"))
 			{
-				NuGetPush(file, new NuGetPushSettings 
+				if (!file.ToString().EndsWith(".symbols.nupkg"))
 				{
-					Source = "https://www.myget.org/F/baunegaard/symbols/api/v2/package",
-					ApiKey = EnvironmentVariable("MYGET_API_KEY")
-				});
+					NuGetPush(file, new NuGetPushSettings 
+					{
+						Source = "https://api.nuget.org/v3/index.json",
+						ApiKey = EnvironmentVariable("NUGET_API_KEY")
+					});
+				}
 			}
-			else
+		}
+		else if (EnvironmentVariable("APPVEYOR_REPO_BRANCH") == "master")
+		{
+			Information("Pushing artifacts to MyGet repository");
+
+			foreach (var file in GetFiles(artifactsFolder.Path + "/*.nupkg"))
 			{
-				NuGetPush(file, new NuGetPushSettings 
+				if (file.ToString().EndsWith(".symbols.nupkg"))
 				{
-					Source = "https://www.myget.org/F/baunegaard/api/v2/package",
-					ApiKey = EnvironmentVariable("MYGET_API_KEY")
-				});
+					NuGetPush(file, new NuGetPushSettings 
+					{
+						Source = "https://www.myget.org/F/baunegaard/symbols/api/v2/package",
+						ApiKey = EnvironmentVariable("MYGET_API_KEY")
+					});
+				}
+				else
+				{
+					NuGetPush(file, new NuGetPushSettings 
+					{
+						Source = "https://www.myget.org/F/baunegaard/api/v2/package",
+						ApiKey = EnvironmentVariable("MYGET_API_KEY")
+					});
+				}
 			}
+		}
+		else
+		{
+			Information("Nothing to do");
 		}
 	}
 	else
@@ -229,7 +239,11 @@ void DeleteDirectoryIfExists(ConvertableDirectoryPath path)
 {
 	if (DirectoryExists(path))
 	{
-		DeleteDirectory(path, true);
+		DeleteDirectory(path, new DeleteDirectorySettings
+		{
+			Recursive = true,
+			Force = true
+		});
 	}
 }
 
