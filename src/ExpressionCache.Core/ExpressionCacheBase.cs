@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -72,8 +73,10 @@ namespace ExpressionCache.Core
 
         private ExpressionResult ParseExpression(LambdaExpression expression)
         {
-            var methodCall = expression.Body as MethodCallExpression;
-            if (methodCall == null) throw new ArgumentException("expression: body must be a method call");
+            if (!(expression.Body is MethodCallExpression methodCall))
+            {
+                throw new ArgumentException("expression: body must be a method call");
+            }
 
             var method = methodCall.Method;
 
@@ -98,8 +101,7 @@ namespace ExpressionCache.Core
         {
             var internalCacheKey = expression.ToString();
 
-            ExpressionResult cached;
-            if (_internalCache.TryGetValue(internalCacheKey, out cached))
+            if (_internalCache.TryGetValue(internalCacheKey, out ExpressionResult cached))
             {
                 // Fetch result from internal cache and clone the result so we dont manipulate it in cache.
                 return cached.NewBase();
@@ -122,7 +124,7 @@ namespace ExpressionCache.Core
             return baseResult.NewBase();
         }
 
-        private static string GenerateBaseCacheKey(MethodCallExpression methodCall, MethodInfo methodInfo)
+        private static string GenerateBaseCacheKey(MethodCallExpression methodCall, MethodBase methodInfo)
         {
             var keyBuilder = new CacheKeyBuilder()
                 .By(methodCall.Object?.Type.Name)
@@ -132,7 +134,7 @@ namespace ExpressionCache.Core
             return CachePrefix + keyBuilder;
         }
 
-        private static string GenerateCacheKey(string baseKey, object[] arguments)
+        private static string GenerateCacheKey(string baseKey, IEnumerable<object> arguments)
         {
             var keyBuilder = new CacheKeyBuilder();
             foreach (var argument in arguments) keyBuilder.By(argument);
