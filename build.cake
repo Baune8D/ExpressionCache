@@ -1,6 +1,14 @@
-#tool "GitVersion.CommandLine&version=4.0.0-beta0012"
-#tool "OpenCover&version=4.6.519"
-#tool "ReportGenerator&version=3.1.2"
+// Install modules.
+#module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
+
+// Install addins.
+#addin nuget:?package=Cake.Coverlet&version=2.5.1
+
+// Install tools.
+#tool nuget:?package=ReportGenerator&version=4.7.1
+
+// Install .NET Core Global tools.
+#tool dotnet:?package=GitVersion.Tool&version=5.5.0
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -14,14 +22,17 @@ var configuration = Argument("configuration", "Release");
 //////////////////////////////////////////////////////////////////////
 
 var solutionFile = File("./ExpressionCache.sln");
-var coverageResult = File("./coverage.xml");
+var coverageFilename = "coverage";
 
 var artifactsFolder = Directory("./artifacts");
 var coverageFolder = Directory("./coverage");
 
-Func<IFileSystemInfo, bool> excludeFolders = fileSystemInfo => 
+var excludeFolders = new GlobberSettings
+{
+  Predicate = fileSystemInfo =>
 	!fileSystemInfo.Path.FullPath.Contains("/bin") &&
-	!fileSystemInfo.Path.FullPath.Contains("/obj");
+	!fileSystemInfo.Path.FullPath.Contains("/obj")
+};
 
 string semVersion;
 
@@ -36,16 +47,18 @@ Task("Version")
 
     if (AppVeyor.IsRunningOnAppVeyor)
     {
-		GitVersion(new GitVersionSettings 
+		GitVersion(new GitVersionSettings
 		{
 			OutputType = GitVersionOutput.BuildServer,
-			UpdateAssemblyInfo = true
+			UpdateAssemblyInfo = true,
+			NoFetch = true
 		});
 	}
 
-    var result = GitVersion(new GitVersionSettings 
+    var result = GitVersion(new GitVersionSettings
 	{
-		OutputType = GitVersionOutput.Json
+		OutputType = GitVersionOutput.Json,
+		NoFetch = true
     });
 
 	semVersion = result.NuGetVersionV2;
@@ -60,7 +73,11 @@ Task("Build")
 
 	DotNetCoreBuild(solutionFile, new DotNetCoreBuildSettings
     {
-        Configuration = configuration
+        Configuration = configuration,
+        MSBuildSettings = new DotNetCoreMSBuildSettings
+        {
+            TreatAllWarningsAs = MSBuildTreatAllWarningsAs.Error
+        }
 	});
 });
 
@@ -68,43 +85,39 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
-	Information("Removing old coverage.xml");
-
-	DeleteFileIfExists(coverageResult);
+	Information("Removing old coverage");
+	DeleteDirectoryIfExists(coverageFolder);
 
 	Information("Running tests and generating coverage");
 
-	string[] coverageFilters = 
-	{
-		"+[ExpressionCache.*]*",
-		"-[ExpressionCache.*Tests]*"
-	};
+    var testSettings = new DotNetCoreTestSettings
+    {
+        Configuration = configuration,
+        NoRestore = true,
+        NoBuild = true
+    };
 
-	var settings = new OpenCoverSettings
-	{
-		OldStyle = true,
-		MergeOutput = true,
-		ReturnTargetCodeOffset = 0
-	}
-	.ExcludeByAttribute("*.ExcludeFromCodeCoverage*");
+    var coverageSettings = new CoverletSettings {
+        CollectCoverage = true,
+        MergeWithFile = coverageFolder + File($"{coverageFilename}.json"),
+        CoverletOutputDirectory = coverageFolder,
+        CoverletOutputName = coverageFilename,
+        CoverletOutputFormat = CoverletOutputFormat.json | CoverletOutputFormat.opencover,
+        Exclude = {
+            "[ExpressionCache.*Tests.Shared]*"
+        }
+    };
 
-	foreach (var filter in coverageFilters)
-	{
-		settings.WithFilter(filter);
-	}
+    foreach (var file in GetFiles("./src/**/*.Tests/*.csproj", excludeFolders))
+    {
+        DotNetCoreTest(file.FullPath, testSettings, coverageSettings);
+    }
 
-	var parameters = $"--fx-version 2.0.7 -nobuild -configuration {configuration}";
-
-	foreach (var file in GetFiles("./test/*/*.csproj", excludeFolders))
-	{
-		settings.WorkingDirectory = file.GetDirectory();
-
-		OpenCover(tool => 
-		{
-			tool.DotNetCoreTool(file, "xunit", parameters);
-		},
-		coverageResult, settings);
-	}
+    if (!AppVeyor.IsRunningOnAppVeyor)
+    {
+        Information("Generating coverage report");
+        ReportGenerator(coverageFolder + File($"{coverageFilename}.opencover.xml"), coverageFolder);
+    }
 });
 
 Task("Package")
@@ -112,29 +125,21 @@ Task("Package")
 	.IsDependentOn("Test")
     .Does(() =>
 {
-	var nupkgGlob = "./src/*/bin/*/*.nupkg";
-
 	Information("Cleaning artifacts");
-
 	DeleteDirectoryIfExists(artifactsFolder);
-	DeleteFiles(nupkgGlob);
 
 	Information("Packaging libraries to artifacts directory");
 
-	foreach (var file in GetFiles("./src/*/*.csproj", excludeFolders))
-	{
-		DotNetCorePack(file.FullPath, new DotNetCorePackSettings
-		{
-			Configuration = configuration,
-			IncludeSymbols = true,
-			IncludeSource = true,
-			MSBuildSettings = new DotNetCoreMSBuildSettings()
-				.SetVersion(semVersion)
-		});
-	}
-
-	CreateDirectoryIfNotExists(artifactsFolder);
-	MoveFiles(nupkgGlob, artifactsFolder);
+    DotNetCorePack(solutionFile, new DotNetCorePackSettings
+    {
+        Configuration = configuration,
+        IncludeSymbols = true,
+        IncludeSource = true,
+        OutputDirectory = artifactsFolder,
+        MSBuildSettings = new DotNetCoreMSBuildSettings()
+            .SetVersion(semVersion)
+            .WithProperty("SymbolPackageFormat", "snupkg")
+    });
 });
 
 Task("Upload-Artifacts")
@@ -168,39 +173,35 @@ Task("NuGet-Push")
 
 			foreach (var file in GetFiles(artifactsFolder.Path + "/*.nupkg"))
 			{
-				if (!file.ToString().EndsWith(".symbols.nupkg"))
-				{
-					NuGetPush(file, new NuGetPushSettings 
-					{
-						Source = "https://api.nuget.org/v3/index.json",
-						ApiKey = EnvironmentVariable("NUGET_API_KEY")
-					});
-				}
+                NuGetPush(file, new NuGetPushSettings
+                {
+                    Source = "https://api.nuget.org/v3/index.json",
+                    ApiKey = EnvironmentVariable("NUGET_API_KEY")
+                });
 			}
 		}
-		else if (EnvironmentVariable("APPVEYOR_REPO_BRANCH") == "master")
+
+		if (EnvironmentVariable("APPVEYOR_REPO_BRANCH") == "master")
 		{
 			Information("Pushing artifacts to MyGet repository");
 
 			foreach (var file in GetFiles(artifactsFolder.Path + "/*.nupkg"))
 			{
-				if (file.ToString().EndsWith(".symbols.nupkg"))
-				{
-					NuGetPush(file, new NuGetPushSettings 
-					{
-						Source = "https://www.myget.org/F/baunegaard/symbols/api/v2/package",
-						ApiKey = EnvironmentVariable("MYGET_API_KEY")
-					});
-				}
-				else
-				{
-					NuGetPush(file, new NuGetPushSettings 
-					{
-						Source = "https://www.myget.org/F/baunegaard/api/v2/package",
-						ApiKey = EnvironmentVariable("MYGET_API_KEY")
-					});
-				}
+                NuGetPush(file, new NuGetPushSettings
+                {
+                    Source = "https://www.myget.org/F/baunegaard/api/v2/package",
+                    ApiKey = EnvironmentVariable("MYGET_API_KEY")
+                });
 			}
+
+            foreach (var file in GetFiles(artifactsFolder.Path + "/*.snupkg"))
+            {
+                NuGetPush(file, new NuGetPushSettings
+                {
+                    Source = "https://www.myget.org/F/baunegaard/api/v3/index.json",
+                    ApiKey = EnvironmentVariable("MYGET_API_KEY")
+                });
+            }
 		}
 		else
 		{
@@ -213,27 +214,9 @@ Task("NuGet-Push")
 	}
 });
 
-Task("Coverage-Report")
-	.IsDependentOn("Test")
-    .Does(() =>
-{
-	Information("Generating coverage report");
-
-	DeleteDirectoryIfExists(coverageFolder);
-	ReportGenerator(coverageResult, coverageFolder);
-});
-
 //////////////////////////////////////////////////////////////////////
 // HELPERS
 //////////////////////////////////////////////////////////////////////
-
-void CreateDirectoryIfNotExists(ConvertableDirectoryPath path)
-{
-	if (!DirectoryExists(path))
-	{
-		CreateDirectory(path);
-	}
-}
 
 void DeleteDirectoryIfExists(ConvertableDirectoryPath path)
 {
@@ -244,14 +227,6 @@ void DeleteDirectoryIfExists(ConvertableDirectoryPath path)
 			Recursive = true,
 			Force = true
 		});
-	}
-}
-
-void DeleteFileIfExists(ConvertableFilePath path)
-{
-	if (FileExists(path))
-	{
-		DeleteFile(path);
 	}
 }
 

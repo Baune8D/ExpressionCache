@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		build.cake = build.cake
-		build.ps1 = build.ps1
-		build.sh = build.sh
 		GitVersion.yml = GitVersion.yml
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionCache.Core.Tests", "src\ExpressionCache.Core.Tests\ExpressionCache.Core.Tests.csproj", "{C9B64175-438C-45CF-813D-080668803BF2}"
@@ -26,17 +26,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionCache.Distributed
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F72E828C-F7DE-4017-98C6-DA80131AF0D9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E2EE2ECC-2D04-461E-AF3D-86E66B7CEF70}"
-	ProjectSection(SolutionItems) = preProject
-		tools\packages.config = tools\packages.config
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{DE84B09E-D95B-4FA5-B0F3-BAE35F5F38FA}"
 	ProjectSection(SolutionItems) = preProject
 		.vscode\extensions.json = .vscode\extensions.json
 		.vscode\settings.json = .vscode\settings.json
 		.vscode\tasks.json = .vscode\tasks.json
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{5C5971BF-7D23-4A16-98D3-E5989A978626}"
+ProjectSection(SolutionItems) = preProject
+	.config\dotnet-tools.json = .config\dotnet-tools.json
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +67,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{95FC9AF3-A1C9-409E-A5BB-48BAD47A8EDF} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
 		{7F57734F-030D-47FF-901E-EF7744591C3F} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
-		{E2EE2ECC-2D04-461E-AF3D-86E66B7CEF70} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 		{DE84B09E-D95B-4FA5-B0F3-BAE35F5F38FA} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 		{C9B64175-438C-45CF-813D-080668803BF2} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
 		{E1933559-16AE-4A3F-B0B0-320EAF8566C6} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
+		{5C5971BF-7D23-4A16-98D3-E5989A978626} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A299EE11-0232-400D-9A3B-DC506153B286}
