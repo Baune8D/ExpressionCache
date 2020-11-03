@@ -2,7 +2,11 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/0abskdimkpe1m558?svg=true)](https://ci.appveyor.com/project/Baune8D/expressioncache)
 [![codecov](https://codecov.io/gh/Baune8D/expressioncache/branch/master/graph/badge.svg)](https://codecov.io/gh/Baune8D/expressioncache)
 
-**Available on NuGet:** [https://www.nuget.org/packages?q=expressioncache](https://www.nuget.org/packages?q=expressioncache)  
+| Package                     | Version                                                                                                                                 |
+| ----------------------------|:---------------------------------------------------------------------------------------------------------------------------------------:|
+| ExpressionCache.Core        | [![NuGet Badge](https://buildstats.info/nuget/ExpressionCache.Core)](https://www.nuget.org/packages/ExpressionCache.Core)               |
+| ExpressionCache.Distributed | [![NuGet Badge](https://buildstats.info/nuget/ExpressionCache.Distributed)](https://www.nuget.org/packages/ExpressionCache.Distributed) |
+
 **Dev feed:** [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)  
 
 Inspired from this article [http://www.codeducky.org/robust-net-caching/](http://www.codeducky.org/robust-net-caching/)
