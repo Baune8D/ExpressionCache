@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ExpressionCache.Core.Tests.TestHelpers;
+using ExpressionCache.Core.Testing;
 using Moq;
 using Shouldly;
 using Xunit;

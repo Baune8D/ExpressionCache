@@ -1,4 +1,4 @@
-﻿namespace ExpressionCache.Core.Tests.TestHelpers
+﻿namespace ExpressionCache.Core.Testing
 {
     public class CacheableObject : ICacheKey
     {

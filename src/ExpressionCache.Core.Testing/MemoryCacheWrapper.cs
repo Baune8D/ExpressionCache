@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace ExpressionCache.Core.Tests.TestHelpers
+namespace ExpressionCache.Core.Testing
 {
     public class MemoryCacheWrapper : MemoryCache
     {

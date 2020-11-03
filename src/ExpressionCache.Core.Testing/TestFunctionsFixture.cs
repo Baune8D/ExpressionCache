@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ExpressionCache.Core.Tests.TestHelpers
+namespace ExpressionCache.Core.Testing
 {
     public class TestFunctionsFixture
     {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 
-namespace ExpressionCache.Core.Tests.TestHelpers
+namespace ExpressionCache.Core.Testing
 {
     public class ExpressionCacheBaseFixture : IDisposable
     {

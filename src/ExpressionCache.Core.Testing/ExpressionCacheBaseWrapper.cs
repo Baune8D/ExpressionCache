@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace ExpressionCache.Core.Tests.TestHelpers
+namespace ExpressionCache.Core.Testing
 {
     public class ExpressionCacheBaseWrapper : ExpressionCacheBase
     {

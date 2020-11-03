@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ExpressionCache.Core.Tests.TestHelpers;
+using ExpressionCache.Core.Testing;
 using Shouldly;
 using Xunit;
 

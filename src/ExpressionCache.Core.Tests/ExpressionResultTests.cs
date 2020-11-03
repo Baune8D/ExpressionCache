@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using ExpressionCache.Core.Tests.TestHelpers;
+using ExpressionCache.Core.Testing;
 using Shouldly;
 using Xunit;
 
