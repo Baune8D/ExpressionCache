@@ -9,8 +9,6 @@
 
 **Dev feed:** [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)  
 
-Inspired from this article [http://www.codeducky.org/robust-net-caching/](http://www.codeducky.org/robust-net-caching/)
-
 ## Table of Contents
 1. [ExpressionCache.Core](#expressionCache.core)
 2. [ExpressionCache.Distributed](#expressionCache.distributed)
