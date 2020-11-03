@@ -8,6 +8,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Baune8D/ExpressionCache</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Baune8D/ExpressionCache</PackageProjectUrl>
+    <PackageTags>Caching, Distributed</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
