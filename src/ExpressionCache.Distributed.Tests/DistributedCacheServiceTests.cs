@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using ExpressionCache.Distributed.Testing;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
-using Microsoft.Extensions.Options;
 
 namespace ExpressionCache.Distributed.Tests
 {
     public class DistributedCacheServiceTests : IClassFixture<TestFunctionsFixture>
     {
+        private const string Value = "TestValue";
+
         private readonly TestFunctionsFixture _testFunctions;
 
         private readonly MemoryDistributedCache _memoryDistributedCache;
         private readonly IDistributedCacheService _distributedCacheService;
-
-        private const string Value = "TestValue";
 
         public DistributedCacheServiceTests(TestFunctionsFixture testFunctions)
         {
@@ -65,11 +65,11 @@ namespace ExpressionCache.Distributed.Tests
         {
             var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
 
-            _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
-            var beforeRemove = _memoryDistributedCache.GetString(key);
+            await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
+            var beforeRemove = await _memoryDistributedCache.GetStringAsync(key);
 
             await _distributedCacheService.RemoveAsync(() => _testFunctions.FunctionWithoutParameters());
-            var afterRemove = _memoryDistributedCache.GetString(key);
+            var afterRemove = await _memoryDistributedCache.GetStringAsync(key);
 
             beforeRemove.ShouldNotBeNull();
             afterRemove.ShouldBeNull();
@@ -80,11 +80,11 @@ namespace ExpressionCache.Distributed.Tests
         {
             var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
-            _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
-            var beforeRemove = _memoryDistributedCache.GetString(key);
+            await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
+            var beforeRemove = await _memoryDistributedCache.GetStringAsync(key);
 
             await _distributedCacheService.RemoveAsync(() => _testFunctions.FunctionWithoutParametersAsync());
-            var afterRemove = _memoryDistributedCache.GetString(key);
+            var afterRemove = await _memoryDistributedCache.GetStringAsync(key);
 
             beforeRemove.ShouldNotBeNull();
             afterRemove.ShouldBeNull();
@@ -122,7 +122,7 @@ namespace ExpressionCache.Distributed.Tests
             var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
 
             var beforeSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParameters());
-            _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParameters());
 
             beforeSet.ShouldBeFalse();
@@ -135,7 +135,7 @@ namespace ExpressionCache.Distributed.Tests
             var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
             var beforeSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParametersAsync());
-            _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParametersAsync());
 
             beforeSet.ShouldBeFalse();
@@ -174,7 +174,7 @@ namespace ExpressionCache.Distributed.Tests
             var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
 
             var beforeSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParameters());
-            _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParameters());
 
             beforeSet.ShouldBeNull();
@@ -187,7 +187,7 @@ namespace ExpressionCache.Distributed.Tests
             var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
             var beforeSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParametersAsync());
-            _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParametersAsync());
 
             beforeSet.ShouldBeNull();
@@ -200,7 +200,7 @@ namespace ExpressionCache.Distributed.Tests
             var expressionList = new List<Expression<Func<string>>>
             {
                 () => _testFunctions.FunctionWithoutParameters(),
-                () => _testFunctions.OtherFunctionWithoutParameters()
+                () => _testFunctions.OtherFunctionWithoutParameters(),
             };
 
             var key1 = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
@@ -208,8 +208,8 @@ namespace ExpressionCache.Distributed.Tests
 
             var beforeSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-            _memoryDistributedCache.SetString(key1, JsonConvert.SerializeObject(Value));
-            _memoryDistributedCache.SetString(key2, JsonConvert.SerializeObject(Value + "2"));
+            await _memoryDistributedCache.SetStringAsync(key1, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(key2, JsonConvert.SerializeObject(Value + "2"));
 
             var afterSet = await _distributedCacheService.GetManyAsync(expressionList);
 
@@ -227,7 +227,7 @@ namespace ExpressionCache.Distributed.Tests
             var expressionList = new List<Expression<Func<Task<string>>>>
             {
                 () => _testFunctions.FunctionWithoutParametersAsync(),
-                () => _testFunctions.OtherFunctionWithoutParametersAsync()
+                () => _testFunctions.OtherFunctionWithoutParametersAsync(),
             };
 
             var key1 = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
@@ -235,8 +235,8 @@ namespace ExpressionCache.Distributed.Tests
 
             var beforeSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-            _memoryDistributedCache.SetString(key1, JsonConvert.SerializeObject(Value));
-            _memoryDistributedCache.SetString(key2, JsonConvert.SerializeObject(Value + "2"));
+            await _memoryDistributedCache.SetStringAsync(key1, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(key2, JsonConvert.SerializeObject(Value + "2"));
 
             var afterSet = await _distributedCacheService.GetManyAsync(expressionList);
 
@@ -277,7 +277,7 @@ namespace ExpressionCache.Distributed.Tests
 
             await _distributedCacheService.SetAsync(() => _testFunctions.FunctionWithoutParameters(), Value, TimeSpan.FromHours(1));
 
-            var afterSet = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(key));
+            var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key));
             afterSet.ShouldBe(Value);
         }
 
@@ -288,7 +288,7 @@ namespace ExpressionCache.Distributed.Tests
 
             await _distributedCacheService.SetAsync(() => _testFunctions.FunctionWithoutParametersAsync(), Value, TimeSpan.FromHours(1));
 
-            var afterSet = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(key));
+            var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key));
             afterSet.ShouldBe(Value);
         }
     }

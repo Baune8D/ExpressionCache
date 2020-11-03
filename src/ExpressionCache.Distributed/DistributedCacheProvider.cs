@@ -8,14 +8,12 @@ namespace ExpressionCache.Distributed
 {
     public class DistributedCacheProvider : IExpressionCacheProvider
     {
-        public IDistributedCache Cache;
-
         public DistributedCacheProvider(IDistributedCache cache)
         {
             Cache = cache;
         }
 
-        #region ---- Provider Functions ----
+        public IDistributedCache Cache { get; }
 
         public CacheResult<TResult> Get<TResult>(string key)
         {
@@ -24,7 +22,7 @@ namespace ExpressionCache.Distributed
 
         public async Task<CacheResult<TResult>> GetAsync<TResult>(string key)
         {
-            return CreateCacheResult<TResult>(await Cache.GetStringAsync(key));
+            return CreateCacheResult<TResult>(await Cache.GetStringAsync(key).ConfigureAwait(false));
         }
 
         public void Set<TResult>(string key, TResult value, TimeSpan expiry)
@@ -34,19 +32,20 @@ namespace ExpressionCache.Distributed
 
         public async Task SetAsync<TResult>(string key, TResult value, TimeSpan expiry)
         {
-            await Cache.SetStringAsync(key, JsonConvert.SerializeObject(value), GetOptions(expiry));
+            await Cache.SetStringAsync(key, JsonConvert.SerializeObject(value), GetOptions(expiry)).ConfigureAwait(false);
         }
-
-        #endregion
 
         private static CacheResult<TResult> CreateCacheResult<TResult>(string entry)
         {
-            if (entry == null) return CacheResult<TResult>.Failure();
+            if (entry == null)
+            {
+                return CacheResult<TResult>.Failure();
+            }
 
             return new CacheResult<TResult>
             {
                 Success = true,
-                Content = JsonConvert.DeserializeObject<TResult>(entry)
+                Content = JsonConvert.DeserializeObject<TResult>(entry),
             };
         }
 
@@ -54,9 +53,8 @@ namespace ExpressionCache.Distributed
         {
             return new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = expiry
+                AbsoluteExpirationRelativeToNow = expiry,
             };
         }
     }
 }
-

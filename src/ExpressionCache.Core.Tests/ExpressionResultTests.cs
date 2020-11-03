@@ -20,8 +20,10 @@ namespace ExpressionCache.Core.Tests
         {
             Expression<Func<string>> expression = () => _testFunctions.FunctionWithoutParameters();
 
-            var methodCall = expression.Body as MethodCallExpression;
-            if (methodCall == null) throw new NullReferenceException(nameof(methodCall));
+            if (!(expression.Body is MethodCallExpression methodCall))
+            {
+                throw new NullReferenceException(nameof(methodCall));
+            }
 
             var expressionResult = new ExpressionResult(2, new object(), "TestBaseCacheKey")
             {
@@ -30,9 +32,9 @@ namespace ExpressionCache.Core.Tests
                 Arguments =
                 {
                     [0] = new object(),
-                    [1] = new object()
+                    [1] = new object(),
                 },
-                CacheKey = "CacheKey"
+                CacheKey = "CacheKey",
             };
 
             var newResult = expressionResult.NewBase();

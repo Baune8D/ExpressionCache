@@ -7,19 +7,18 @@ namespace ExpressionCache.Core
 {
     public sealed class CacheKeyBuilder : ICacheKeyBuilder
     {
-        public readonly string NullString = "0x6e756c6c";
+        public const string NullString = "0x6e756c6c";
 
         private readonly StringBuilder _builder = new StringBuilder();
 
         /// <summary>
-        /// Adds the given value to the key
+        /// Adds the given value to the key.
         /// </summary>
         public ICacheKeyBuilder By(object value)
         {
             DateTime? dateTimeValue;
             Guid? guidValue;
             IConvertible convertibleValue;
-            //Type typeValue;
             IEnumerable enumerableValue;
             ICacheKey cacheKeyValue;
 
@@ -28,10 +27,10 @@ namespace ExpressionCache.Core
             {
                 _builder.Append(FormatValue(NullString));
             }
-            // DateTime is convered by IConvertible, but the default ToString() implementation
-            // doesn't have enough granularity to distinguish between unequal DateTimes
             else if ((dateTimeValue = value as DateTime?).HasValue)
             {
+                // DateTime is converted by IConvertible, but the default ToString() implementation
+                // doesn't have enough granularity to distinguish between unequal DateTimes
                 _builder.Append(FormatValue(dateTimeValue.Value.Ticks));
             }
             else if ((guidValue = value as Guid?).HasValue)
@@ -42,10 +41,6 @@ namespace ExpressionCache.Core
             {
                 _builder.Append(FormatValue(convertibleValue.ToString(CultureInfo.InvariantCulture)));
             }
-            //else if ((typeValue = value as Type) != null)
-            //{
-            //    _builder.Append(FormatValue(typeValue.GUID));
-            //}
             else if ((enumerableValue = value as IEnumerable) != null)
             {
                 foreach (var element in enumerableValue)
@@ -65,14 +60,11 @@ namespace ExpressionCache.Core
             return this;
         }
 
+        public override string ToString() => _builder.ToString();
+
         private static string FormatValue<TResult>(TResult value)
         {
             return "{" + value + "}";
-        }
-
-        public override string ToString()
-        {
-            return _builder.ToString();
         }
     }
 }

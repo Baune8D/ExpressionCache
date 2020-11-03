@@ -10,9 +10,12 @@ namespace ExpressionCache.Distributed
 {
     public class DistributedCacheService : ExpressionCacheBase, IDistributedCacheService
     {
-        protected IDistributedCache Cache => ((DistributedCacheProvider) Provider).Cache;
+        public DistributedCacheService(IDistributedCache cache)
+            : base(new DistributedCacheProvider(cache))
+        {
+        }
 
-        public DistributedCacheService(IDistributedCache cache) : base(new DistributedCacheProvider(cache)) { }
+        protected IDistributedCache Cache => ((DistributedCacheProvider)Provider).Cache;
 
         public void Remove<TResult>(Expression<Func<TResult>> expression)
         {
@@ -26,12 +29,12 @@ namespace ExpressionCache.Distributed
 
         public async Task RemoveAsync<TResult>(Expression<Func<TResult>> expression)
         {
-            await Cache.RemoveAsync(GetKey(expression));
+            await Cache.RemoveAsync(GetKey(expression)).ConfigureAwait(false);
         }
 
         public async Task RemoveAsync<TResult>(Expression<Func<Task<TResult>>> expression)
         {
-            await Cache.RemoveAsync(GetKey(expression));
+            await Cache.RemoveAsync(GetKey(expression)).ConfigureAwait(false);
         }
 
         public bool Exists<TResult>(Expression<Func<TResult>> expression)
@@ -46,12 +49,12 @@ namespace ExpressionCache.Distributed
 
         public async Task<bool> ExistsAsync<TResult>(Expression<Func<TResult>> expression)
         {
-            return await Cache.GetAsync(GetKey(expression)) != null;
+            return await Cache.GetAsync(GetKey(expression)).ConfigureAwait(false) != null;
         }
 
         public async Task<bool> ExistsAsync<TResult>(Expression<Func<Task<TResult>>> expression)
         {
-            return await Cache.GetAsync(GetKey(expression)) != null;
+            return await Cache.GetAsync(GetKey(expression)).ConfigureAwait(false) != null;
         }
 
         public TResult Get<TResult>(Expression<Func<TResult>> expression)
@@ -66,54 +69,70 @@ namespace ExpressionCache.Distributed
 
         public async Task<TResult> GetAsync<TResult>(Expression<Func<TResult>> expression)
         {
-            return (await Provider.GetAsync<TResult>(GetKey(expression))).Content;
+            return (await Provider.GetAsync<TResult>(GetKey(expression)).ConfigureAwait(false)).Content;
         }
 
         public async Task<TResult> GetAsync<TResult>(Expression<Func<Task<TResult>>> expression)
         {
-            return (await Provider.GetAsync<TResult>(GetKey(expression))).Content;
+            return (await Provider.GetAsync<TResult>(GetKey(expression)).ConfigureAwait(false)).Content;
         }
 
         public async Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions)
         {
-            return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList());
+            return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList()).ConfigureAwait(false);
         }
 
         public async Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions)
         {
-            return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList());
+            return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList()).ConfigureAwait(false);
+        }
+
+        public void Set<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)
+        {
+            if (expiry == null)
+            {
+                throw new ArgumentNullException(nameof(expiry));
+            }
+
+            Provider.Set(GetKey(expression), value, expiry);
+        }
+
+        public void Set<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry)
+        {
+            if (expiry == null)
+            {
+                throw new ArgumentNullException(nameof(expiry));
+            }
+
+            Provider.Set(GetKey(expression), value, expiry);
+        }
+
+        public async Task SetAsync<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)
+        {
+            if (expiry == null)
+            {
+                throw new ArgumentNullException(nameof(expiry));
+            }
+
+            await Provider.SetAsync(GetKey(expression), value, expiry).ConfigureAwait(false);
+        }
+
+        public async Task SetAsync<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry)
+        {
+            if (expiry == null)
+            {
+                throw new ArgumentNullException(nameof(expiry));
+            }
+
+            await Provider.SetAsync(GetKey(expression), value, expiry).ConfigureAwait(false);
         }
 
         private async Task<List<TResult>> GetManyBaseAsync<TResult>(List<string> cacheKeyList)
         {
             var tasks = new List<Task<CacheResult<TResult>>>();
             cacheKeyList.ForEach(key => tasks.Add(Provider.GetAsync<TResult>(key)));
-            var result = await Task.WhenAll(tasks);
+            var result = await Task.WhenAll(tasks).ConfigureAwait(false);
             return result.Select(r => r.Content).ToList();
-        }
-
-        public void Set<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)
-        {
-            if (expiry == null) throw new ArgumentNullException(nameof(expiry));
-            Provider.Set(GetKey(expression), value, expiry);
-        }
-
-        public void Set<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry)
-        {
-            if (expiry == null) throw new ArgumentNullException(nameof(expiry));
-            Provider.Set(GetKey(expression), value, expiry);
-        }
-
-        public async Task SetAsync<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)
-        {
-            if (expiry == null) throw new ArgumentNullException(nameof(expiry));
-            await Provider.SetAsync(GetKey(expression), value, expiry);
-        }
-
-        public async Task SetAsync<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry)
-        {
-            if (expiry == null) throw new ArgumentNullException(nameof(expiry));
-            await Provider.SetAsync(GetKey(expression), value, expiry);
         }
     }
 }

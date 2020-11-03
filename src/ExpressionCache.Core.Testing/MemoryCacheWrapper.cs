@@ -5,13 +5,9 @@ namespace ExpressionCache.Core.Testing
 {
     public class MemoryCacheWrapper : MemoryCache
     {
-        public MemoryCacheWrapper(IOptions<MemoryCacheOptions> optionsAccessor) 
-            : base(optionsAccessor) { }
-
-        public new bool TryGetValue(object key, out object result)
+        public MemoryCacheWrapper(IOptions<MemoryCacheOptions> optionsAccessor)
+            : base(optionsAccessor)
         {
-            result = null;
-            return false;
         }
     }
 }

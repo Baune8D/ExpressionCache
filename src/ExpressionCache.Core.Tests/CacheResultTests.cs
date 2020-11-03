@@ -10,7 +10,7 @@ namespace ExpressionCache.Core.Tests
         {
             var result = CacheResult<int>.Failure();
             result.Success.ShouldBeFalse();
-            result.Content.ShouldBe(default(int));
+            result.Content.ShouldBe(default);
         }
     }
 }

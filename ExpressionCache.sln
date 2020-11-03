@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		.editorconfig = .editorconfig
 		Directory.Build.props = Directory.Build.props
+		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionCache.Core.Tests", "src\ExpressionCache.Core.Tests\ExpressionCache.Core.Tests.csproj", "{C9B64175-438C-45CF-813D-080668803BF2}"
@@ -41,6 +42,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionCache.Core.Testing", "src\ExpressionCache.Core.Testing\ExpressionCache.Core.Testing.csproj", "{69E4DBC2-2456-468E-BAF4-DF230CBAD3B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionCache.Distributed.Testing", "src\ExpressionCache.Distributed.Testing\ExpressionCache.Distributed.Testing.csproj", "{FBD81058-51EC-4719-9652-9B79D6E5C8A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rulesets", "rulesets", "{E4F2049C-42A0-488E-8E03-E8ED6C62F722}"
+ProjectSection(SolutionItems) = preProject
+	rulesets\shared.ruleset = rulesets\shared.ruleset
+	rulesets\tests.ruleset = rulesets\tests.ruleset
+	rulesets\testing.ruleset = rulesets\testing.ruleset
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +93,7 @@ Global
 		{5C5971BF-7D23-4A16-98D3-E5989A978626} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 		{69E4DBC2-2456-468E-BAF4-DF230CBAD3B7} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
 		{FBD81058-51EC-4719-9652-9B79D6E5C8A8} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
+		{E4F2049C-42A0-488E-8E03-E8ED6C62F722} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A299EE11-0232-400D-9A3B-DC506153B286}

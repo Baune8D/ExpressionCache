@@ -2,20 +2,20 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
-using Microsoft.Extensions.Options;
 
 namespace ExpressionCache.Distributed.Tests
 {
     public class DistributedCacheProviderTests
     {
-        private readonly MemoryDistributedCache _memoryDistributedCache;
-        private readonly DistributedCacheProvider _distributedCacheProvider;
-
         private const string Key = "TestKey";
         private const string Value = "TestValue";
+
+        private readonly MemoryDistributedCache _memoryDistributedCache;
+        private readonly DistributedCacheProvider _distributedCacheProvider;
 
         public DistributedCacheProviderTests()
         {
@@ -41,13 +41,13 @@ namespace ExpressionCache.Distributed.Tests
             var cached = _distributedCacheProvider.Get<string>(Key);
 
             cached.Success.ShouldBeFalse();
-            cached.Content.ShouldBe(default(string));
+            cached.Content.ShouldBe(default);
         }
 
         [Fact]
         public async Task GetAsync_String_ShouldReturnCacheResult()
         {
-            _memoryDistributedCache.SetString(Key, JsonConvert.SerializeObject(Value));
+            await _memoryDistributedCache.SetStringAsync(Key, JsonConvert.SerializeObject(Value));
 
             var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
@@ -61,7 +61,7 @@ namespace ExpressionCache.Distributed.Tests
             var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
             cached.Success.ShouldBeFalse();
-            cached.Content.ShouldBe(default(string));
+            cached.Content.ShouldBe(default);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace ExpressionCache.Distributed.Tests
         {
             await _distributedCacheProvider.SetAsync(Key, Value, TimeSpan.FromHours(1));
 
-            var cached = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(Key));
+            var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key));
             cached.ShouldBe(Value);
         }
     }

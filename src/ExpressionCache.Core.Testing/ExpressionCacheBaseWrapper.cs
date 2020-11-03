@@ -4,7 +4,9 @@ namespace ExpressionCache.Core.Testing
 {
     public class ExpressionCacheBaseWrapper : ExpressionCacheBase
     {
-        public ExpressionCacheBaseWrapper(IMemoryCache internalCache, IExpressionCacheProvider provider) 
-            : base(internalCache, provider) { }
+        public ExpressionCacheBaseWrapper(IMemoryCache internalCache, IExpressionCacheProvider provider)
+            : base(internalCache, provider)
+        {
+        }
     }
 }

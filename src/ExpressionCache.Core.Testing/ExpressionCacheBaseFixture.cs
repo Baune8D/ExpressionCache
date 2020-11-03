@@ -4,20 +4,28 @@ using Moq;
 
 namespace ExpressionCache.Core.Testing
 {
-    public class ExpressionCacheBaseFixture : IDisposable
+    public sealed class ExpressionCacheBaseFixture : IDisposable
     {
+        public const string CachedResult = "CachedResult";
+
         public static readonly TimeSpan TimeSpan = TimeSpan.FromHours(1);
 
-        public readonly string CachedResult = "CachedResult";
-
-        public Mock<IExpressionCacheProvider> CacheProviderMock { get; private set; }
-        public ExpressionCacheBaseWrapper ExpressionCacheBase { get; private set; }
+        private readonly MemoryCacheWrapper _memoryCacheWrapper;
 
         public ExpressionCacheBaseFixture()
         {
-            var internalCacheMock = new MemoryCacheWrapper(new MemoryCacheOptions());
+            _memoryCacheWrapper = new MemoryCacheWrapper(new MemoryCacheOptions());
             CacheProviderMock = new Mock<IExpressionCacheProvider>();
-            ExpressionCacheBase = new ExpressionCacheBaseWrapper(internalCacheMock, CacheProviderMock.Object);
+            ExpressionCacheBase = new ExpressionCacheBaseWrapper(_memoryCacheWrapper, CacheProviderMock.Object);
+        }
+
+        public Mock<IExpressionCacheProvider> CacheProviderMock { get; }
+
+        public ExpressionCacheBaseWrapper ExpressionCacheBase { get; }
+
+        public void Dispose()
+        {
+            _memoryCacheWrapper.Dispose();
         }
 
         public void SetCacheProviderGetSuccess()
@@ -27,7 +35,7 @@ namespace ExpressionCache.Core.Testing
                 .Returns(new CacheResult<string>
                 {
                     Success = true,
-                    Content = CachedResult
+                    Content = CachedResult,
                 });
         }
 
@@ -38,7 +46,7 @@ namespace ExpressionCache.Core.Testing
                 .ReturnsAsync(new CacheResult<string>
                 {
                     Success = true,
-                    Content = CachedResult
+                    Content = CachedResult,
                 });
         }
 
@@ -54,12 +62,6 @@ namespace ExpressionCache.Core.Testing
             CacheProviderMock
                 .Setup(m => m.GetAsync<string>(It.IsAny<string>()))
                 .ReturnsAsync(CacheResult<string>.Failure);
-        }
-
-        public void Dispose()
-        {
-            ExpressionCacheBase = null;
-            CacheProviderMock = null;
         }
     }
 }

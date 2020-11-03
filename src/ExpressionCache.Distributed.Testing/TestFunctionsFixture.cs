@@ -1,33 +1,34 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace ExpressionCache.Distributed.Testing
 {
     public class TestFunctionsFixture
     {
-        public readonly string ReturnResult = "ReturnResult";
+        public const string ReturnResult = "ReturnResult";
 
+        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
         public string FunctionWithoutParameters()
         {
             return ReturnResult;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
         public string OtherFunctionWithoutParameters()
         {
             return ReturnResult;
         }
 
-        #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-
-        public async Task<string> FunctionWithoutParametersAsync()
+        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
+        public Task<string> FunctionWithoutParametersAsync()
         {
-            return ReturnResult;
+            return Task.FromResult(ReturnResult);
         }
 
-        public async Task<string> OtherFunctionWithoutParametersAsync()
+        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
+        public Task<string> OtherFunctionWithoutParametersAsync()
         {
-            return ReturnResult;
+            return Task.FromResult(ReturnResult);
         }
-
-        #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }

@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
-using Microsoft.Extensions.Options;
 
 namespace ExpressionCache.Distributed.Tests
 {
@@ -31,7 +31,7 @@ namespace ExpressionCache.Distributed.Tests
         [Fact]
         public void AddDistributedExpressionCache_Null_ShouldThrowArgumentNullException()
         {
-            Should.Throw<ArgumentNullException>(() => ((IServiceCollection) null).AddDistributedExpressionCache());
+            Should.Throw<ArgumentNullException>(() => ((IServiceCollection)null).AddDistributedExpressionCache());
         }
     }
 }

@@ -20,13 +20,13 @@ namespace ExpressionCache.Core.Tests
         public void By_Null_ShouldBeCacheKeyString()
         {
             var key = _cacheKeyBuilder.By(null).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(_cacheKeyBuilder.NullString));
+            key.ShouldBe(CacheKeyHelper.Format(CacheKeyBuilder.NullString));
         }
 
         [Fact]
         public void By_DateTime_ShouldBeCacheKeyString()
         {
-            var dateTime = new DateTime();
+            var dateTime = default(DateTime);
             var key = _cacheKeyBuilder.By(dateTime).ToString();
             key.ShouldBe(CacheKeyHelper.Format(dateTime.Ticks));
         }
