@@ -37,11 +37,6 @@
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)rulesets/testing.ruleset</CodeAnalysisRuleSet>
       </PropertyGroup>
     </When>
-    <When Condition="'$(IsBuildProject)' == 'true'">
-      <PropertyGroup>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)rulesets/build.ruleset</CodeAnalysisRuleSet>
-      </PropertyGroup>
-    </When>
     <Otherwise>
       <PropertyGroup>
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)rulesets/shared.ruleset</CodeAnalysisRuleSet>
