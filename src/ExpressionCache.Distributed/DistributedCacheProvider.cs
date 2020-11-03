@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ExpressionCache.Core;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
 
 namespace ExpressionCache.Distributed
 {
@@ -27,12 +27,12 @@ namespace ExpressionCache.Distributed
 
         public void Set<TResult>(string key, TResult value, TimeSpan expiry)
         {
-            Cache.SetString(key, JsonConvert.SerializeObject(value), GetOptions(expiry));
+            Cache.SetString(key, JsonSerializer.Serialize(value), GetOptions(expiry));
         }
 
         public async Task SetAsync<TResult>(string key, TResult value, TimeSpan expiry)
         {
-            await Cache.SetStringAsync(key, JsonConvert.SerializeObject(value), GetOptions(expiry)).ConfigureAwait(false);
+            await Cache.SetStringAsync(key, JsonSerializer.Serialize(value), GetOptions(expiry)).ConfigureAwait(false);
         }
 
         private static CacheResult<TResult> CreateCacheResult<TResult>(string entry)
@@ -45,7 +45,7 @@ namespace ExpressionCache.Distributed
             return new CacheResult<TResult>
             {
                 Success = true,
-                Content = JsonConvert.DeserializeObject<TResult>(entry),
+                Content = JsonSerializer.Deserialize<TResult>(entry),
             };
         }
 
