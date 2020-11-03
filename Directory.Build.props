@@ -1,0 +1,8 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>9</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+</Project>

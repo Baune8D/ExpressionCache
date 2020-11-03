@@ -2,26 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
     <Authors>Morten Larsen</Authors>
-    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Core functionality for ExpressionCache libraries.</Description>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/baunegaard/expressioncache.git</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/baunegaard/expressioncache</PackageProjectUrl>
-    <Product>ExpressionCache.Core</Product>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <RepositoryUrl>https://github.com/Baune8D/ExpressionCache</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Baune8D/ExpressionCache</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
