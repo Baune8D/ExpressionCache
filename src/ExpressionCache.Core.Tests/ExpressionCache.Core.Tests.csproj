@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -22,7 +22,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\ExpressionCache.Core.Testing\ExpressionCache.Core.Testing.csproj" />
   </ItemGroup>
