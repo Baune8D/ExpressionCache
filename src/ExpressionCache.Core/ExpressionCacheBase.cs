@@ -59,11 +59,6 @@ namespace ExpressionCache.Core
                 throw new ArgumentNullException(nameof(expression));
             }
 
-            if (expiry == null)
-            {
-                throw new ArgumentNullException(nameof(expiry));
-            }
-
             var expressionResult = ParseExpression(expression);
 
             if (cacheAction == CacheAction.Invoke)
@@ -94,11 +89,6 @@ namespace ExpressionCache.Core
             if (expression == null)
             {
                 throw new ArgumentNullException(nameof(expression));
-            }
-
-            if (expiry == null)
-            {
-                throw new ArgumentNullException(nameof(expiry));
             }
 
             var expressionResult = ParseExpression(expression);

@@ -22,7 +22,7 @@ namespace ExpressionCache.Core.Tests
 
             if (!(expression.Body is MethodCallExpression methodCall))
             {
-                throw new NullReferenceException(nameof(methodCall));
+                throw new InvalidOperationException(nameof(methodCall));
             }
 
             var expressionResult = new ExpressionResult(2, new object(), "TestBaseCacheKey")

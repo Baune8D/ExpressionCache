@@ -89,41 +89,21 @@ namespace ExpressionCache.Distributed
 
         public void Set<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)
         {
-            if (expiry == null)
-            {
-                throw new ArgumentNullException(nameof(expiry));
-            }
-
             Provider.Set(GetKey(expression), value, expiry);
         }
 
         public void Set<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry)
         {
-            if (expiry == null)
-            {
-                throw new ArgumentNullException(nameof(expiry));
-            }
-
             Provider.Set(GetKey(expression), value, expiry);
         }
 
         public async Task SetAsync<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry)
         {
-            if (expiry == null)
-            {
-                throw new ArgumentNullException(nameof(expiry));
-            }
-
             await Provider.SetAsync(GetKey(expression), value, expiry).ConfigureAwait(false);
         }
 
         public async Task SetAsync<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry)
         {
-            if (expiry == null)
-            {
-                throw new ArgumentNullException(nameof(expiry));
-            }
-
             await Provider.SetAsync(GetKey(expression), value, expiry).ConfigureAwait(false);
         }
 
