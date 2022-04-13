@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Shouldly;
 using Xunit;
 
 namespace ExpressionCache.Distributed.Tests
@@ -31,8 +31,8 @@ namespace ExpressionCache.Distributed.Tests
 
             var cached = _distributedCacheProvider.Get<string>(Key);
 
-            cached.Success.ShouldBeTrue();
-            cached.Content.ShouldBe(Value);
+            cached.Success.Should().BeTrue();
+            cached.Content.Should().Be(Value);
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace ExpressionCache.Distributed.Tests
         {
             var cached = _distributedCacheProvider.Get<string>(Key);
 
-            cached.Success.ShouldBeFalse();
-            cached.Content.ShouldBe(default);
+            cached.Success.Should().BeFalse();
+            cached.Content.Should().Be(default);
         }
 
         [Fact]
@@ -51,8 +51,8 @@ namespace ExpressionCache.Distributed.Tests
 
             var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
-            cached.Success.ShouldBeTrue();
-            cached.Content.ShouldBe(Value);
+            cached.Success.Should().BeTrue();
+            cached.Content.Should().Be(Value);
         }
 
         [Fact]
@@ -60,8 +60,8 @@ namespace ExpressionCache.Distributed.Tests
         {
             var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
-            cached.Success.ShouldBeFalse();
-            cached.Content.ShouldBe(default);
+            cached.Success.Should().BeFalse();
+            cached.Content.Should().Be(default);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace ExpressionCache.Distributed.Tests
             _distributedCacheProvider.Set(Key, Value, TimeSpan.FromHours(1));
 
             var cached = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(Key));
-            cached.ShouldBe(Value);
+            cached.Should().Be(Value);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace ExpressionCache.Distributed.Tests
             await _distributedCacheProvider.SetAsync(Key, Value, TimeSpan.FromHours(1));
 
             var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key));
-            cached.ShouldBe(Value);
+            cached.Should().Be(Value);
         }
     }
 }

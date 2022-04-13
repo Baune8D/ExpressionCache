@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ExpressionCache.Distributed.Testing;
+using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Shouldly;
 using Xunit;
 
 namespace ExpressionCache.Distributed.Tests
@@ -41,8 +41,8 @@ namespace ExpressionCache.Distributed.Tests
             _distributedCacheService.Remove(() => _testFunctions.FunctionWithoutParameters());
             var afterRemove = _memoryDistributedCache.GetString(key);
 
-            beforeRemove.ShouldNotBeNull();
-            afterRemove.ShouldBeNull();
+            beforeRemove.Should().NotBeNull();
+            afterRemove.Should().BeNull();
         }
 
         [Fact]
@@ -56,8 +56,8 @@ namespace ExpressionCache.Distributed.Tests
             _distributedCacheService.Remove(() => _testFunctions.FunctionWithoutParametersAsync());
             var afterRemove = _memoryDistributedCache.GetString(key);
 
-            beforeRemove.ShouldNotBeNull();
-            afterRemove.ShouldBeNull();
+            beforeRemove.Should().NotBeNull();
+            afterRemove.Should().BeNull();
         }
 
         [Fact]
@@ -71,8 +71,8 @@ namespace ExpressionCache.Distributed.Tests
             await _distributedCacheService.RemoveAsync(() => _testFunctions.FunctionWithoutParameters());
             var afterRemove = await _memoryDistributedCache.GetStringAsync(key);
 
-            beforeRemove.ShouldNotBeNull();
-            afterRemove.ShouldBeNull();
+            beforeRemove.Should().NotBeNull();
+            afterRemove.Should().BeNull();
         }
 
         [Fact]
@@ -86,8 +86,8 @@ namespace ExpressionCache.Distributed.Tests
             await _distributedCacheService.RemoveAsync(() => _testFunctions.FunctionWithoutParametersAsync());
             var afterRemove = await _memoryDistributedCache.GetStringAsync(key);
 
-            beforeRemove.ShouldNotBeNull();
-            afterRemove.ShouldBeNull();
+            beforeRemove.Should().NotBeNull();
+            afterRemove.Should().BeNull();
         }
 
         [Fact]
@@ -99,8 +99,8 @@ namespace ExpressionCache.Distributed.Tests
             _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
             var afterSet = _distributedCacheService.Exists(() => _testFunctions.FunctionWithoutParameters());
 
-            beforeSet.ShouldBeFalse();
-            afterSet.ShouldBeTrue();
+            beforeSet.Should().BeFalse();
+            afterSet.Should().BeTrue();
         }
 
         [Fact]
@@ -112,8 +112,8 @@ namespace ExpressionCache.Distributed.Tests
             _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
             var afterSet = _distributedCacheService.Exists(() => _testFunctions.FunctionWithoutParametersAsync());
 
-            beforeSet.ShouldBeFalse();
-            afterSet.ShouldBeTrue();
+            beforeSet.Should().BeFalse();
+            afterSet.Should().BeTrue();
         }
 
         [Fact]
@@ -125,8 +125,8 @@ namespace ExpressionCache.Distributed.Tests
             await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParameters());
 
-            beforeSet.ShouldBeFalse();
-            afterSet.ShouldBeTrue();
+            beforeSet.Should().BeFalse();
+            afterSet.Should().BeTrue();
         }
 
         [Fact]
@@ -138,8 +138,8 @@ namespace ExpressionCache.Distributed.Tests
             await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParametersAsync());
 
-            beforeSet.ShouldBeFalse();
-            afterSet.ShouldBeTrue();
+            beforeSet.Should().BeFalse();
+            afterSet.Should().BeTrue();
         }
 
         [Fact]
@@ -151,8 +151,8 @@ namespace ExpressionCache.Distributed.Tests
             _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
             var afterSet = _distributedCacheService.Get(() => _testFunctions.FunctionWithoutParameters());
 
-            beforeSet.ShouldBeNull();
-            afterSet.ShouldBe(Value);
+            beforeSet.Should().BeNull();
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -164,8 +164,8 @@ namespace ExpressionCache.Distributed.Tests
             _memoryDistributedCache.SetString(key, JsonConvert.SerializeObject(Value));
             var afterSet = _distributedCacheService.Get(() => _testFunctions.FunctionWithoutParametersAsync());
 
-            beforeSet.ShouldBeNull();
-            afterSet.ShouldBe(Value);
+            beforeSet.Should().BeNull();
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -177,8 +177,8 @@ namespace ExpressionCache.Distributed.Tests
             await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParameters());
 
-            beforeSet.ShouldBeNull();
-            afterSet.ShouldBe(Value);
+            beforeSet.Should().BeNull();
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -190,8 +190,8 @@ namespace ExpressionCache.Distributed.Tests
             await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
             var afterSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParametersAsync());
 
-            beforeSet.ShouldBeNull();
-            afterSet.ShouldBe(Value);
+            beforeSet.Should().BeNull();
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -213,12 +213,12 @@ namespace ExpressionCache.Distributed.Tests
 
             var afterSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-            beforeSet.Count.ShouldBe(expressionList.Count);
-            beforeSet[0].ShouldBeNull();
-            beforeSet[1].ShouldBeNull();
-            afterSet.Count.ShouldBe(expressionList.Count);
-            afterSet[0].ShouldBe(Value);
-            afterSet[1].ShouldBe(Value + "2");
+            beforeSet.Count.Should().Be(expressionList.Count);
+            beforeSet[0].Should().BeNull();
+            beforeSet[1].Should().BeNull();
+            afterSet.Count.Should().Be(expressionList.Count);
+            afterSet[0].Should().Be(Value);
+            afterSet[1].Should().Be(Value + "2");
         }
 
         [Fact]
@@ -240,12 +240,12 @@ namespace ExpressionCache.Distributed.Tests
 
             var afterSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-            beforeSet.Count.ShouldBe(expressionList.Count);
-            beforeSet[0].ShouldBeNull();
-            beforeSet[1].ShouldBeNull();
-            afterSet.Count.ShouldBe(expressionList.Count);
-            afterSet[0].ShouldBe(Value);
-            afterSet[1].ShouldBe(Value + "2");
+            beforeSet.Count.Should().Be(expressionList.Count);
+            beforeSet[0].Should().BeNull();
+            beforeSet[1].Should().BeNull();
+            afterSet.Count.Should().Be(expressionList.Count);
+            afterSet[0].Should().Be(Value);
+            afterSet[1].Should().Be(Value + "2");
         }
 
         [Fact]
@@ -256,7 +256,7 @@ namespace ExpressionCache.Distributed.Tests
             _distributedCacheService.Set(() => _testFunctions.FunctionWithoutParameters(), Value, TimeSpan.FromHours(1));
 
             var afterSet = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(key));
-            afterSet.ShouldBe(Value);
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -267,7 +267,7 @@ namespace ExpressionCache.Distributed.Tests
             _distributedCacheService.Set(() => _testFunctions.FunctionWithoutParametersAsync(), Value, TimeSpan.FromHours(1));
 
             var afterSet = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(key));
-            afterSet.ShouldBe(Value);
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -278,7 +278,7 @@ namespace ExpressionCache.Distributed.Tests
             await _distributedCacheService.SetAsync(() => _testFunctions.FunctionWithoutParameters(), Value, TimeSpan.FromHours(1));
 
             var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key));
-            afterSet.ShouldBe(Value);
+            afterSet.Should().Be(Value);
         }
 
         [Fact]
@@ -289,7 +289,7 @@ namespace ExpressionCache.Distributed.Tests
             await _distributedCacheService.SetAsync(() => _testFunctions.FunctionWithoutParametersAsync(), Value, TimeSpan.FromHours(1));
 
             var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key));
-            afterSet.ShouldBe(Value);
+            afterSet.Should().Be(Value);
         }
     }
 }

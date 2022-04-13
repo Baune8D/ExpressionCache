@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using ExpressionCache.Core.Testing;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace ExpressionCache.Core.Tests
@@ -39,16 +39,16 @@ namespace ExpressionCache.Core.Tests
 
             var newResult = expressionResult.NewBase();
 
-            newResult.Instance.ShouldBe(expressionResult.Instance);
-            newResult.BaseCacheKey.ShouldBe(expressionResult.BaseCacheKey);
+            newResult.Instance.Should().Be(expressionResult.Instance);
+            newResult.BaseCacheKey.Should().Be(expressionResult.BaseCacheKey);
 
-            newResult.Arguments.Length.ShouldBe(expressionResult.Arguments.Length);
-            newResult.Arguments[0].ShouldBeNull();
-            newResult.Arguments[1].ShouldBeNull();
+            newResult.Arguments.Length.Should().Be(expressionResult.Arguments.Length);
+            newResult.Arguments[0].Should().BeNull();
+            newResult.Arguments[1].Should().BeNull();
 
-            newResult.Method.ShouldBeNull();
-            newResult.MethodCall.ShouldBeNull();
-            newResult.CacheKey.ShouldBeNull();
+            newResult.Method.Should().BeNull();
+            newResult.MethodCall.Should().BeNull();
+            newResult.CacheKey.Should().BeNull();
         }
     }
 }

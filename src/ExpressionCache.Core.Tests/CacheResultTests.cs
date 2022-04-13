@@ -1,4 +1,4 @@
-﻿using Shouldly;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace ExpressionCache.Core.Tests
@@ -9,8 +9,8 @@ namespace ExpressionCache.Core.Tests
         public void Failure_Integer_ShouldReturnSuccessFalseWithContentAsDefaultInt()
         {
             var result = CacheResult<int>.Failure();
-            result.Success.ShouldBeFalse();
-            result.Content.ShouldBe(default);
+            result.Success.Should().BeFalse();
+            result.Content.Should().Be(default);
         }
     }
 }

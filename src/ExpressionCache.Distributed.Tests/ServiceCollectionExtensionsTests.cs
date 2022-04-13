@@ -1,9 +1,9 @@
 ﻿using System;
+using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Shouldly;
 using Xunit;
 
 namespace ExpressionCache.Distributed.Tests
@@ -24,14 +24,16 @@ namespace ExpressionCache.Distributed.Tests
             var provider = services.BuildServiceProvider();
             var service = provider.GetService<IDistributedCacheService>();
 
-            service.ShouldNotBeNull();
-            service.ShouldBeOfType<DistributedCacheService>();
+            service.Should().NotBeNull();
+            service.Should().BeOfType<DistributedCacheService>();
         }
 
         [Fact]
         public void AddDistributedExpressionCache_Null_ShouldThrowArgumentNullException()
         {
-            Should.Throw<ArgumentNullException>(() => ((IServiceCollection)null).AddDistributedExpressionCache());
+            Action act = () => ((IServiceCollection)null).AddDistributedExpressionCache();
+
+            act.Should().Throw<ArgumentNullException>();
         }
     }
 }

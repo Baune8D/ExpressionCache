@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using ExpressionCache.Core.Testing;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace ExpressionCache.Core.Tests
@@ -20,7 +20,7 @@ namespace ExpressionCache.Core.Tests
         public void By_Null_ShouldBeCacheKeyString()
         {
             var key = _cacheKeyBuilder.By(null).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(CacheKeyBuilder.NullString));
+            key.Should().Be(CacheKeyHelper.Format(CacheKeyBuilder.NullString));
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace ExpressionCache.Core.Tests
         {
             var dateTime = default(DateTime);
             var key = _cacheKeyBuilder.By(dateTime).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(dateTime.Ticks));
+            key.Should().Be(CacheKeyHelper.Format(dateTime.Ticks));
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace ExpressionCache.Core.Tests
         {
             var guid = Guid.NewGuid();
             var key = _cacheKeyBuilder.By(guid).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(guid));
+            key.Should().Be(CacheKeyHelper.Format(guid));
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace ExpressionCache.Core.Tests
         {
             const int number = 5;
             var key = _cacheKeyBuilder.By(number).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(number));
+            key.Should().Be(CacheKeyHelper.Format(number));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace ExpressionCache.Core.Tests
         {
             const double number = 5.5;
             var key = _cacheKeyBuilder.By(number).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(number.ToString(CultureInfo.InvariantCulture)));
+            key.Should().Be(CacheKeyHelper.Format(number.ToString(CultureInfo.InvariantCulture)));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace ExpressionCache.Core.Tests
         {
             const string text = "test";
             var key = _cacheKeyBuilder.By(text).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(text));
+            key.Should().Be(CacheKeyHelper.Format(text));
         }
 
         [Fact]
@@ -70,14 +70,16 @@ namespace ExpressionCache.Core.Tests
             const string text = "test";
             var obj = new CacheableObject(number, text);
             var key = _cacheKeyBuilder.By(obj).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(number) + CacheKeyHelper.Format(text));
+            key.Should().Be(CacheKeyHelper.Format(number) + CacheKeyHelper.Format(text));
         }
 
         [Fact]
         public void By_NonCacheableObject_ShouldThrowArgumentException()
         {
             var obj = new NonCacheableObject();
-            Should.Throw<ArgumentException>(() => _cacheKeyBuilder.By(obj));
+            Action act = () => _cacheKeyBuilder.By(obj);
+
+            act.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -87,7 +89,7 @@ namespace ExpressionCache.Core.Tests
             const string text2 = "test2";
             var list = new List<string> { text1, text2 };
             var key = _cacheKeyBuilder.By(list).ToString();
-            key.ShouldBe(CacheKeyHelper.Format(text1) + CacheKeyHelper.Format(text2));
+            key.Should().Be(CacheKeyHelper.Format(text1) + CacheKeyHelper.Format(text2));
         }
     }
 }
