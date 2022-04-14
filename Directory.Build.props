@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <LangVersion>9</LangVersion>
     <Nullable>disable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
