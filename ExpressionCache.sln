@@ -38,7 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionCache.Distributed
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rulesets", "rulesets", "{E4F2049C-42A0-488E-8E03-E8ED6C62F722}"
 ProjectSection(SolutionItems) = preProject
-	rulesets\shared.ruleset = rulesets\shared.ruleset
 	rulesets\tests.ruleset = rulesets\tests.ruleset
 	rulesets\testing.ruleset = rulesets\testing.ruleset
 EndProjectSection
