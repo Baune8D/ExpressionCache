@@ -1,6 +1,6 @@
 # ExpressionCache
 [![Build status](https://ci.appveyor.com/api/projects/status/0abskdimkpe1m558?svg=true)](https://ci.appveyor.com/project/Baune8D/expressioncache)
-[![codecov](https://codecov.io/gh/Baune8D/expressioncache/branch/master/graph/badge.svg)](https://codecov.io/gh/Baune8D/expressioncache)
+[![codecov](https://codecov.io/gh/Baune8D/expressioncache/branch/main/graph/badge.svg)](https://codecov.io/gh/Baune8D/expressioncache)
 
 | Package                     | Version                                                                                                                                 |
 | ----------------------------|:---------------------------------------------------------------------------------------------------------------------------------------:|
