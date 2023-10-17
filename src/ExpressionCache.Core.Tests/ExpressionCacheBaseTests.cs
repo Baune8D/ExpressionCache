@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ExpressionCache.Core.Testing;
+using ExpressionCache.Core.Tests.Data;
 using FluentAssertions;
 using Moq;
 using Xunit;

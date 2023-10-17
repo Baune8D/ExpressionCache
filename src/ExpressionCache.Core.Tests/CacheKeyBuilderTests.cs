@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ExpressionCache.Core.Testing;
+using ExpressionCache.Core.Tests.Data;
 using FluentAssertions;
 using Xunit;
 

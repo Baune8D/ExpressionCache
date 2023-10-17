@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace ExpressionCache.Distributed.Testing
+namespace ExpressionCache.Distributed.Tests.Data
 {
     public class TestFunctionsFixture
     {

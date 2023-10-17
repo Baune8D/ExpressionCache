@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using ExpressionCache.Core.Testing;
+using ExpressionCache.Core.Tests.Data;
 using FluentAssertions;
 using Xunit;
 

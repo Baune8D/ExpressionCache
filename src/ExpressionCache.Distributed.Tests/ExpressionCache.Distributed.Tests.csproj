@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExpressionCache.Distributed.Testing\ExpressionCache.Distributed.Testing.csproj" />
+    <ProjectReference Include="..\ExpressionCache.Distributed\ExpressionCache.Distributed.csproj" />
   </ItemGroup>
 
 </Project>
