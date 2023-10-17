@@ -27,4 +27,10 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageVersion Include="System.Text.Json" Version="6.0.8" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageVersion Include="System.Text.Json" Version="7.0.3" />
+  </ItemGroup>
 </Project>
