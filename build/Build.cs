@@ -4,7 +4,7 @@ using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.AppVeyor;
-using Nuke.Common.Execution;
+using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
@@ -15,13 +15,13 @@ using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.ReportGenerator;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.Codecov.CodecovTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
-[CheckBuildProjectConfigurations]
+// ReSharper disable AllUnderscoreLocalParameterName
+
 [ShutdownDotNetAfterServerBuild]
 [AppVeyor(
     AppVeyorImage.VisualStudio2022,
@@ -44,6 +44,7 @@ class Build : NukeBuild
     [Parameter(Name = "NUGET_API_KEY")] [Secret] string NuGetApiKey { get; set; }
 
     [Solution] readonly Solution Solution;
+    [GitRepository] readonly GitRepository GitRepository;
     [GitVersion] readonly GitVersion GitVersion;
     [CI] readonly AppVeyor AppVeyor;
 
@@ -51,7 +52,8 @@ class Build : NukeBuild
     static AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     static AbsolutePath CoverageDirectory => RootDirectory / "coverage";
-    static AbsolutePath CoverageResults => CoverageDirectory / "results";
+
+    static AbsolutePath CoverageResult => CoverageDirectory / "Cobertura.xml";
 
     static IEnumerable<AbsolutePath> Artifacts => ArtifactsDirectory.GlobFiles("*.nupkg");
 
@@ -61,9 +63,9 @@ class Build : NukeBuild
         {
             SourceDirectory
                 .GlobDirectories("**/bin", "**/obj")
-                .ForEach(DeleteDirectory);
+                .ForEach(path => path.DeleteDirectory());
 
-            EnsureCleanDirectory(ArtifactsDirectory);
+            ArtifactsDirectory.CreateOrCleanDirectory();
         });
 
     Target Compile => _ => _
@@ -82,27 +84,29 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            EnsureCleanDirectory(CoverageDirectory);
-
-            var projects = Solution.GetProjects("*.Tests");
+            CoverageDirectory.CreateOrCleanDirectory();
+            TestResultFolders.ForEach(directory => directory.DeleteDirectory());
 
             DotNetTest(s => s
                 .SetConfiguration(Configuration)
                 .EnableNoRestore()
                 .EnableNoBuild()
-                .EnableCollectCoverage()
+                .SetDataCollector("XPlat Code Coverage")
                 .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
-                .CombineWith(projects, (ss, project) => ss
-                    .SetProjectFile(project)
-                    .SetCoverletOutput(CoverageResults / $"{project.Name}.cobertura.xml")),
+                .CombineWith(TestProjects, (ss, project) => ss
+                    .SetProjectFile(project)),
                 degreeOfParallelism: Environment.ProcessorCount);
+
+            ReportGenerator(s => s
+                .SetReports(CoverageResults)
+                .SetTargetDirectory(CoverageDirectory)
+                .SetReportTypes(ReportTypes.Cobertura));
 
             if (IsLocalBuild)
             {
                 ReportGenerator(s => s
-                    .SetFramework("net6.0")
-                    .SetReports(CoverageResults / "*.cobertura.*.xml")
-                    .SetTargetDirectory(CoverageDirectory / "report"));
+                    .SetReports(CoverageResult)
+                    .SetTargetDirectory(CoverageDirectory));
             }
         });
 
@@ -111,22 +115,19 @@ class Build : NukeBuild
         .Produces(ArtifactsDirectory / "*.nupkg")
         .Executes(() =>
         {
-            EnsureCleanDirectory(ArtifactsDirectory);
+            ArtifactsDirectory.CreateOrCleanDirectory();
 
             DotNetPack(s => s
                 .SetConfiguration(Configuration)
                 .EnableNoRestore()
                 .EnableNoBuild()
-                .EnableIncludeSymbols()
-                .EnableIncludeSource()
                 .SetOutputDirectory(ArtifactsDirectory)
-                .SetVersion(GitVersion.SemVer)
-                .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg));
+                .SetVersion(GitVersion.SemVer));
         });
 
     Target PushMyGet => _ => _
         .DependsOn(Package)
-        .OnlyWhenStatic(() => IsServerBuild && AppVeyor.BranchIsMain())
+        .OnlyWhenStatic(() => IsServerBuild && GitRepository.IsOnMainBranch())
         .Executes(() =>
         {
             NuGetPush(s => s
@@ -134,15 +135,6 @@ class Build : NukeBuild
                 .SetApiKey(MyGetApiKey)
                 .CombineWith(Artifacts, (ss, artifact) => ss
                     .SetTargetPath(artifact)),
-                degreeOfParallelism: Environment.ProcessorCount);
-
-            var symbolArtifacts = ArtifactsDirectory.GlobFiles("*.snupkg");
-
-            NuGetPush(s => s
-                    .SetSource("https://www.myget.org/F/baunegaard/api/v3/index.json")
-                    .SetApiKey(MyGetApiKey)
-                    .CombineWith(symbolArtifacts, (ss, symbolArtifact) => ss
-                        .SetTargetPath(symbolArtifact)),
                 degreeOfParallelism: Environment.ProcessorCount);
         });
 
@@ -164,12 +156,17 @@ class Build : NukeBuild
         .OnlyWhenStatic(() => IsServerBuild)
         .Executes(() =>
         {
-            var files = CoverageResults
-                .GlobFiles("*.cobertura.*.xml")
-                .Select(file => file.ToString());
-
             Codecov(s => s
-                .SetFramework("net5.0")
-                .SetFiles(files));
+                .SetFiles(CoverageResult));
         });
+
+    IEnumerable<Project> TestProjects => Solution.GetAllProjects("*.Tests");
+
+    IEnumerable<AbsolutePath> TestResultFolders => TestProjects
+        .SelectMany(project => project.Directory.GlobDirectories("TestResults"));
+
+    IEnumerable<string> CoverageResults => TestResultFolders
+        .SelectMany(testResults => testResults.GlobDirectories("*"))
+        .SelectMany(output => output.GlobFiles("coverage.cobertura.xml"))
+        .Select(file => file.ToString());
 }
