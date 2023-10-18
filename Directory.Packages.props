@@ -26,15 +26,15 @@
     </PackageVersion>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
-    <PackageVersion Include="System.Text.Json" Version="6.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="[6,7)" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="[6,7)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[6,7)" />
+    <PackageVersion Include="System.Text.Json" Version="[6,7)" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="7.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="[7,8)" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="[7,8)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[7,8)" />
+    <PackageVersion Include="System.Text.Json" Version="[7,8)" />
   </ItemGroup>
 </Project>
