@@ -1,9 +1,8 @@
 next-version: 5.0.0
 branches:
   main:
-    mode: ContinuousDeployment
     label: beta
   develop:
-    increment: patch
+    increment: Patch
 ignore:
   sha: []
