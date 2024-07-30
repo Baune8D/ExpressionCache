@@ -8,10 +8,7 @@ namespace ExpressionCache.Distributed
     {
         public static IServiceCollection AddDistributedExpressionCache(this IServiceCollection services)
         {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
+            ArgumentNullException.ThrowIfNull(services);
 
             services.TryAdd(ServiceDescriptor.Singleton<IDistributedCacheService, DistributedCacheService>());
 

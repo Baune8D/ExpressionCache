@@ -34,30 +34,21 @@ namespace ExpressionCache.Core
 
         public string GetKey<TResult>(Expression<Func<TResult>> expression)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(expression);
 
             return ParseExpression(expression).CacheKey;
         }
 
         public string GetKey<TResult>(Expression<Func<Task<TResult>>> expression)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(expression);
 
             return ParseExpression(expression).CacheKey;
         }
 
         public TResult InvokeCache<TResult>(Expression<Func<TResult>> expression, TimeSpan expiry, CacheAction cacheAction)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(expression);
 
             var expressionResult = ParseExpression(expression);
 
@@ -86,10 +77,7 @@ namespace ExpressionCache.Core
 
         public async Task<TResult> InvokeCacheAsync<TResult>(Expression<Func<Task<TResult>>> expression, TimeSpan expiry, CacheAction cacheAction)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(expression);
 
             var expressionResult = ParseExpression(expression);
 
