@@ -9,11 +9,8 @@ namespace ExpressionCache.Core
     {
         public const string NullString = "0x6e756c6c";
 
-        private readonly StringBuilder _builder = new StringBuilder();
+        private readonly StringBuilder _builder = new();
 
-        /// <summary>
-        /// Adds the given value to the key.
-        /// </summary>
         public ICacheKeyBuilder By(object value)
         {
             DateTime? dateTimeValue;
