@@ -36,4 +36,10 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[8,9)" />
     <PackageVersion Include="System.Text.Json" Version="[8.0.4,9)" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="[9,10)" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="[9,10)" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[9,10)" />
+    <PackageVersion Include="System.Text.Json" Version="[9,10)" />
+  </ItemGroup>
 </Project>
