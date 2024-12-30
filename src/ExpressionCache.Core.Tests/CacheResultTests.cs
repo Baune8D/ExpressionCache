@@ -1,16 +1,15 @@
 ﻿using FluentAssertions;
 using Xunit;
 
-namespace ExpressionCache.Core.Tests
+namespace ExpressionCache.Core.Tests;
+
+public class CacheResultTests
 {
-    public class CacheResultTests
+    [Fact]
+    public void Failure_Integer_ShouldReturnSuccessFalseWithContentAsDefaultInt()
     {
-        [Fact]
-        public void Failure_Integer_ShouldReturnSuccessFalseWithContentAsDefaultInt()
-        {
-            var result = CacheResult<int>.Failure();
-            result.Success.Should().BeFalse();
-            result.Content.Should().Be(default);
-        }
+        var result = CacheResult<int>.Failure();
+        result.Success.Should().BeFalse();
+        result.Content.Should().Be(0);
     }
 }

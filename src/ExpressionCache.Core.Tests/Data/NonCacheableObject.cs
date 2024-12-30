@@ -1,9 +1,8 @@
-﻿namespace ExpressionCache.Core.Tests.Data
-{
-    public class NonCacheableObject
-    {
-        public int Parameter1 { get; set; }
+﻿namespace ExpressionCache.Core.Tests.Data;
 
-        public string Parameter2 { get; set; }
-    }
+public class NonCacheableObject
+{
+    public int Parameter1 { get; set; }
+
+    public string Parameter2 { get; set; }
 }

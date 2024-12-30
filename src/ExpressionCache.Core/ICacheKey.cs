@@ -1,7 +1,6 @@
-﻿namespace ExpressionCache.Core
+﻿namespace ExpressionCache.Core;
+
+public interface ICacheKey
 {
-    public interface ICacheKey
-    {
-        void BuildCacheKey(ICacheKeyBuilder builder);
-    }
+    void BuildCacheKey(ICacheKeyBuilder builder);
 }

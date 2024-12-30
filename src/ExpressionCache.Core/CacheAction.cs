@@ -1,9 +1,8 @@
-﻿namespace ExpressionCache.Core
+﻿namespace ExpressionCache.Core;
+
+public enum CacheAction
 {
-    public enum CacheAction
-    {
-        Invoke,
-        Bypass,
-        Overwrite,
-    }
+    Invoke,
+    Bypass,
+    Overwrite,
 }

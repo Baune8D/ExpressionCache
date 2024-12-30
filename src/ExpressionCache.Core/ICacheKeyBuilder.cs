@@ -1,7 +1,6 @@
-﻿namespace ExpressionCache.Core
+﻿namespace ExpressionCache.Core;
+
+public interface ICacheKeyBuilder
 {
-    public interface ICacheKeyBuilder
-    {
-        ICacheKeyBuilder By(object value);
-    }
+    ICacheKeyBuilder By(object value);
 }

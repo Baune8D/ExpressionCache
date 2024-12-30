@@ -2,17 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace ExpressionCache.Distributed
+namespace ExpressionCache.Distributed;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddDistributedExpressionCache(this IServiceCollection services)
     {
-        public static IServiceCollection AddDistributedExpressionCache(this IServiceCollection services)
-        {
-            ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(services);
 
-            services.TryAdd(ServiceDescriptor.Singleton<IDistributedCacheService, DistributedCacheService>());
+        services.TryAdd(ServiceDescriptor.Singleton<IDistributedCacheService, DistributedCacheService>());
 
-            return services;
-        }
+        return services;
     }
 }

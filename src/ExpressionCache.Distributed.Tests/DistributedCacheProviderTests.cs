@@ -7,79 +7,78 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace ExpressionCache.Distributed.Tests
+namespace ExpressionCache.Distributed.Tests;
+
+public class DistributedCacheProviderTests
 {
-    public class DistributedCacheProviderTests
+    private const string Key = "TestKey";
+    private const string Value = "TestValue";
+
+    private readonly MemoryDistributedCache _memoryDistributedCache;
+    private readonly DistributedCacheProvider _distributedCacheProvider;
+
+    public DistributedCacheProviderTests()
     {
-        private const string Key = "TestKey";
-        private const string Value = "TestValue";
+        var options = new OptionsWrapper<MemoryDistributedCacheOptions>(new MemoryDistributedCacheOptions());
+        _memoryDistributedCache = new MemoryDistributedCache(options);
+        _distributedCacheProvider = new DistributedCacheProvider(_memoryDistributedCache);
+    }
 
-        private readonly MemoryDistributedCache _memoryDistributedCache;
-        private readonly DistributedCacheProvider _distributedCacheProvider;
+    [Fact]
+    public void Get_String_ShouldReturnCacheResult()
+    {
+        _memoryDistributedCache.SetString(Key, JsonConvert.SerializeObject(Value));
 
-        public DistributedCacheProviderTests()
-        {
-            var options = new OptionsWrapper<MemoryDistributedCacheOptions>(new MemoryDistributedCacheOptions());
-            _memoryDistributedCache = new MemoryDistributedCache(options);
-            _distributedCacheProvider = new DistributedCacheProvider(_memoryDistributedCache);
-        }
+        var cached = _distributedCacheProvider.Get<string>(Key);
 
-        [Fact]
-        public void Get_String_ShouldReturnCacheResult()
-        {
-            _memoryDistributedCache.SetString(Key, JsonConvert.SerializeObject(Value));
+        cached.Success.Should().BeTrue();
+        cached.Content.Should().Be(Value);
+    }
 
-            var cached = _distributedCacheProvider.Get<string>(Key);
+    [Fact]
+    public void Get_String_ShouldReturnFailure()
+    {
+        var cached = _distributedCacheProvider.Get<string>(Key);
 
-            cached.Success.Should().BeTrue();
-            cached.Content.Should().Be(Value);
-        }
+        cached.Success.Should().BeFalse();
+        cached.Content.Should().Be(default);
+    }
 
-        [Fact]
-        public void Get_String_ShouldReturnFailure()
-        {
-            var cached = _distributedCacheProvider.Get<string>(Key);
+    [Fact]
+    public async Task GetAsync_String_ShouldReturnCacheResult()
+    {
+        await _memoryDistributedCache.SetStringAsync(Key, JsonConvert.SerializeObject(Value));
 
-            cached.Success.Should().BeFalse();
-            cached.Content.Should().Be(default);
-        }
+        var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
-        [Fact]
-        public async Task GetAsync_String_ShouldReturnCacheResult()
-        {
-            await _memoryDistributedCache.SetStringAsync(Key, JsonConvert.SerializeObject(Value));
+        cached.Success.Should().BeTrue();
+        cached.Content.Should().Be(Value);
+    }
 
-            var cached = await _distributedCacheProvider.GetAsync<string>(Key);
+    [Fact]
+    public async Task GetAsync_String_ShouldReturnFailure()
+    {
+        var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
-            cached.Success.Should().BeTrue();
-            cached.Content.Should().Be(Value);
-        }
+        cached.Success.Should().BeFalse();
+        cached.Content.Should().Be(default);
+    }
 
-        [Fact]
-        public async Task GetAsync_String_ShouldReturnFailure()
-        {
-            var cached = await _distributedCacheProvider.GetAsync<string>(Key);
+    [Fact]
+    public void Set_String_ShouldHaveValueInCache()
+    {
+        _distributedCacheProvider.Set(Key, Value, TimeSpan.FromHours(1));
 
-            cached.Success.Should().BeFalse();
-            cached.Content.Should().Be(default);
-        }
+        var cached = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(Key));
+        cached.Should().Be(Value);
+    }
 
-        [Fact]
-        public void Set_String_ShouldHaveValueInCache()
-        {
-            _distributedCacheProvider.Set(Key, Value, TimeSpan.FromHours(1));
+    [Fact]
+    public async Task SetAsync_String_ShouldHaveValueInCache()
+    {
+        await _distributedCacheProvider.SetAsync(Key, Value, TimeSpan.FromHours(1));
 
-            var cached = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(Key));
-            cached.Should().Be(Value);
-        }
-
-        [Fact]
-        public async Task SetAsync_String_ShouldHaveValueInCache()
-        {
-            await _distributedCacheProvider.SetAsync(Key, Value, TimeSpan.FromHours(1));
-
-            var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key));
-            cached.Should().Be(Value);
-        }
+        var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key));
+        cached.Should().Be(Value);
     }
 }
