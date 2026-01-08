@@ -11,7 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		GitVersion.yml = GitVersion.yml
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
@@ -36,6 +35,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{DE84
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{CE54894B-4446-4C4E-A5BB-9C2EBFEF9235}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{BDCE7E0E-9401-4733-BBF3-FC8E15C1DB1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{603FD4FF-C09D-433C-BC75-5A7437F78A92}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pipeline.yml = .github\workflows\pipeline.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +77,8 @@ Global
 		{DE84B09E-D95B-4FA5-B0F3-BAE35F5F38FA} = {0D3664A8-B03E-4BCF-839D-05B531696319}
 		{C9B64175-438C-45CF-813D-080668803BF2} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
 		{E1933559-16AE-4A3F-B0B0-320EAF8566C6} = {F72E828C-F7DE-4017-98C6-DA80131AF0D9}
+		{BDCE7E0E-9401-4733-BBF3-FC8E15C1DB1E} = {0D3664A8-B03E-4BCF-839D-05B531696319}
+		{603FD4FF-C09D-433C-BC75-5A7437F78A92} = {BDCE7E0E-9401-4733-BBF3-FC8E15C1DB1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A299EE11-0232-400D-9A3B-DC506153B286}
