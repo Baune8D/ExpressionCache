@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AwesomeAssertions;
 using ExpressionCache.Distributed.Tests.Data;
-using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -65,11 +65,11 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
     {
         var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
 
-        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
-        var beforeRemove = await _memoryDistributedCache.GetStringAsync(key);
+        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
+        var beforeRemove = await _memoryDistributedCache.GetStringAsync(key, TestContext.Current.CancellationToken);
 
         await _distributedCacheService.RemoveAsync(() => _testFunctions.FunctionWithoutParameters());
-        var afterRemove = await _memoryDistributedCache.GetStringAsync(key);
+        var afterRemove = await _memoryDistributedCache.GetStringAsync(key, TestContext.Current.CancellationToken);
 
         beforeRemove.Should().NotBeNull();
         afterRemove.Should().BeNull();
@@ -80,11 +80,11 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
     {
         var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
-        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
-        var beforeRemove = await _memoryDistributedCache.GetStringAsync(key);
+        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
+        var beforeRemove = await _memoryDistributedCache.GetStringAsync(key, TestContext.Current.CancellationToken);
 
         await _distributedCacheService.RemoveAsync(() => _testFunctions.FunctionWithoutParametersAsync());
-        var afterRemove = await _memoryDistributedCache.GetStringAsync(key);
+        var afterRemove = await _memoryDistributedCache.GetStringAsync(key, TestContext.Current.CancellationToken);
 
         beforeRemove.Should().NotBeNull();
         afterRemove.Should().BeNull();
@@ -122,7 +122,7 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
         var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
 
         var beforeSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParameters());
-        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
+        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
         var afterSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParameters());
 
         beforeSet.Should().BeFalse();
@@ -135,7 +135,7 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
         var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
         var beforeSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParametersAsync());
-        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
+        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
         var afterSet = await _distributedCacheService.ExistsAsync(() => _testFunctions.FunctionWithoutParametersAsync());
 
         beforeSet.Should().BeFalse();
@@ -174,7 +174,7 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
         var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParameters());
 
         var beforeSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParameters());
-        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
+        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
         var afterSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParameters());
 
         beforeSet.Should().BeNull();
@@ -187,7 +187,7 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
         var key = _distributedCacheService.GetKey(() => _testFunctions.FunctionWithoutParametersAsync());
 
         var beforeSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParametersAsync());
-        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value));
+        await _memoryDistributedCache.SetStringAsync(key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
         var afterSet = await _distributedCacheService.GetAsync(() => _testFunctions.FunctionWithoutParametersAsync());
 
         beforeSet.Should().BeNull();
@@ -208,15 +208,15 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
 
         var beforeSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-        await _memoryDistributedCache.SetStringAsync(key1, JsonConvert.SerializeObject(Value));
-        await _memoryDistributedCache.SetStringAsync(key2, JsonConvert.SerializeObject(Value + "2"));
+        await _memoryDistributedCache.SetStringAsync(key1, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
+        await _memoryDistributedCache.SetStringAsync(key2, JsonConvert.SerializeObject(Value + "2"), TestContext.Current.CancellationToken);
 
         var afterSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-        beforeSet.Count.Should().Be(expressionList.Count);
+        beforeSet.Should().HaveCount(expressionList.Count);
         beforeSet[0].Should().BeNull();
         beforeSet[1].Should().BeNull();
-        afterSet.Count.Should().Be(expressionList.Count);
+        afterSet.Should().HaveCount(expressionList.Count);
         afterSet[0].Should().Be(Value);
         afterSet[1].Should().Be(Value + "2");
     }
@@ -235,15 +235,15 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
 
         var beforeSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-        await _memoryDistributedCache.SetStringAsync(key1, JsonConvert.SerializeObject(Value));
-        await _memoryDistributedCache.SetStringAsync(key2, JsonConvert.SerializeObject(Value + "2"));
+        await _memoryDistributedCache.SetStringAsync(key1, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
+        await _memoryDistributedCache.SetStringAsync(key2, JsonConvert.SerializeObject(Value + "2"), TestContext.Current.CancellationToken);
 
         var afterSet = await _distributedCacheService.GetManyAsync(expressionList);
 
-        beforeSet.Count.Should().Be(expressionList.Count);
+        beforeSet.Should().HaveCount(expressionList.Count);
         beforeSet[0].Should().BeNull();
         beforeSet[1].Should().BeNull();
-        afterSet.Count.Should().Be(expressionList.Count);
+        afterSet.Should().HaveCount(expressionList.Count);
         afterSet[0].Should().Be(Value);
         afterSet[1].Should().Be(Value + "2");
     }
@@ -277,7 +277,7 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
 
         await _distributedCacheService.SetAsync(() => _testFunctions.FunctionWithoutParameters(), Value, TimeSpan.FromHours(1));
 
-        var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key) ?? string.Empty);
+        var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key, TestContext.Current.CancellationToken) ?? string.Empty);
         afterSet.Should().Be(Value);
     }
 
@@ -288,7 +288,7 @@ public sealed class DistributedCacheServiceTests : IClassFixture<TestFunctionsFi
 
         await _distributedCacheService.SetAsync(() => _testFunctions.FunctionWithoutParametersAsync(), Value, TimeSpan.FromHours(1));
 
-        var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key) ?? string.Empty);
+        var afterSet = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(key, TestContext.Current.CancellationToken) ?? string.Empty);
         afterSet.Should().Be(Value);
     }
 

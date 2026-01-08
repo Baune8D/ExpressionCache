@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using AwesomeAssertions;
 using ExpressionCache.Core.Tests.Data;
-using FluentAssertions;
 using Xunit;
 
 namespace ExpressionCache.Core.Tests;

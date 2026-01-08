@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Linq.Expressions;
+using AwesomeAssertions;
 using ExpressionCache.Core.Tests.Data;
-using FluentAssertions;
 using Xunit;
 
 namespace ExpressionCache.Core.Tests;
 
-public class ExpressionResultTests : IClassFixture<TestFunctionsFixture>
+public class ExpressionResultTests(TestFunctionsFixture testFunctions) : IClassFixture<TestFunctionsFixture>
 {
-    private readonly TestFunctionsFixture _testFunctions;
-
-    public ExpressionResultTests(TestFunctionsFixture testFunctions)
-    {
-        _testFunctions = testFunctions;
-    }
-
     [Fact]
     public void NewBase_ExpressionResult_ShouldReturnNewBaseObject()
     {
-        Expression<Func<string>> expression = () => _testFunctions.FunctionWithoutParameters();
+        Expression<Func<string>> expression = () => testFunctions.FunctionWithoutParameters();
 
         if (expression.Body is not MethodCallExpression methodCall)
         {
@@ -42,7 +35,7 @@ public class ExpressionResultTests : IClassFixture<TestFunctionsFixture>
         newResult.Instance.Should().Be(expressionResult.Instance);
         newResult.BaseCacheKey.Should().Be(expressionResult.BaseCacheKey);
 
-        newResult.Arguments.Length.Should().Be(expressionResult.Arguments.Length);
+        newResult.Arguments.Should().HaveCount(expressionResult.Arguments.Length);
         newResult.Arguments[0].Should().BeNull();
         newResult.Arguments[1].Should().BeNull();
 

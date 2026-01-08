@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -41,13 +41,13 @@ public class DistributedCacheProviderTests
         var cached = _distributedCacheProvider.Get<string>(Key);
 
         cached.Success.Should().BeFalse();
-        cached.Content.Should().Be(default);
+        cached.Content.Should().Be(null);
     }
 
     [Fact]
     public async Task GetAsync_String_ShouldReturnCacheResult()
     {
-        await _memoryDistributedCache.SetStringAsync(Key, JsonConvert.SerializeObject(Value));
+        await _memoryDistributedCache.SetStringAsync(Key, JsonConvert.SerializeObject(Value), TestContext.Current.CancellationToken);
 
         var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
@@ -61,7 +61,7 @@ public class DistributedCacheProviderTests
         var cached = await _distributedCacheProvider.GetAsync<string>(Key);
 
         cached.Success.Should().BeFalse();
-        cached.Content.Should().Be(default);
+        cached.Content.Should().Be(null);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class DistributedCacheProviderTests
     {
         await _distributedCacheProvider.SetAsync(Key, Value, TimeSpan.FromHours(1));
 
-        var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key));
+        var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key, TestContext.Current.CancellationToken));
         cached.Should().Be(Value);
     }
 }
