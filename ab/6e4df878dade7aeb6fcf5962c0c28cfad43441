@@ -1,0 +1,25 @@
+src/ExpressionCache.Core.Tests/packages.lock.json
+  s_1da20591e67452::t_c288e0d20db6e6 234-239,472-477,710-715
+src/ExpressionCache.Distributed.Tests/packages.lock.json
+  s_1da20591e67452::t_4fab1375943788 54-59,286-291,518-523
+Directory.Packages.props
+  s_1da20591e67452::t_1fe7a59d146b45 13
+src/ExpressionCache.Distributed.Tests/ExpressionCache.Distributed.Tests.csproj
+  s_1da20591e67452::t_39b1a374fe9232 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ab6e4df878dade7aeb6fcf5962c0c28cfad43441",
+  "prompts": {},
+  "sessions": {
+    "s_1da20591e67452": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56de8afb-cd13-4b9c-b07e-fc995dbca6f0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
