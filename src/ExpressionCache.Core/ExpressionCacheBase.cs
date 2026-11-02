@@ -169,10 +169,15 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
 
         var method = methodCall.Method;
 
-        // We try to cache some of the parsing logic in this function to gain a bit of performance.
-        var result = GenerateBaseExpressionResult(expression, methodCall, method);
-        result.MethodCall = methodCall;
-        result.Method = method;
+        // Read the object the method is called on for every call, like the arguments.
+        // The same lambda can be called on different instances.
+        var instance = methodCall.Object != null ? GetValue(methodCall.Object) : null;
+
+        var result = new ExpressionResult(methodCall.Arguments.Count, instance, GetBaseCacheKey(expression, methodCall, method))
+        {
+            MethodCall = methodCall,
+            Method = method,
+        };
 
         // Add function parameter values to arguments array.
         for (var i = 0; i < result.MethodCall.Arguments.Count; ++i)
@@ -186,32 +191,25 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
         return result;
     }
 
-    private ExpressionResult GenerateBaseExpressionResult(LambdaExpression expression, MethodCallExpression methodCall, MethodInfo method)
+    private string GetBaseCacheKey(LambdaExpression expression, MethodCallExpression methodCall, MethodInfo method)
     {
         ObjectDisposedException.ThrowIf(_internalCache is null, this);
 
         var internalCacheKey = expression.ToString();
 
-        if (_internalCache.TryGetValue(internalCacheKey, out ExpressionResult? cached) && cached is not null)
+        if (_internalCache.TryGetValue(internalCacheKey, out string? cached) && cached is not null)
         {
-            // Fetch result from internal cache and clone the result so we dont manipulate it in cache.
-            return cached.NewBase();
+            return cached;
         }
 
-        var argumentCount = methodCall.Arguments.Count;
-        var instance = methodCall.Object != null ? GetValue(methodCall.Object) : null;
         var baseCacheKey = GenerateBaseCacheKey(methodCall, method);
 
-        // Create new cacheable base expression result.
-        var baseResult = new ExpressionResult(argumentCount, instance, baseCacheKey);
-
-        // Cache result forever as code should not change by itself at runtime.
-        _internalCache.Set(internalCacheKey, baseResult, new MemoryCacheEntryOptions
+        // Cache the base key forever as code should not change by itself at runtime.
+        _internalCache.Set(internalCacheKey, baseCacheKey, new MemoryCacheEntryOptions
         {
             Priority = CacheItemPriority.NeverRemove,
         });
 
-        // Clone the result so we dont manipulate it in cache.
-        return baseResult.NewBase();
+        return baseCacheKey;
     }
 }

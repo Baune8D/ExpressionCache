@@ -42,8 +42,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddDistributedExpressionCache();
 
-// Your service that uses the cache (step 3). Register it as a singleton, see Limitations.
-builder.Services.AddSingleton<ProductService>();
+// Your service that uses the cache (step 3).
+builder.Services.AddScoped<ProductService>();
 ```
 
 `AddDistributedExpressionCache()` registers `IDistributedCacheService` as a singleton, unless one is already registered. It uses the `IDistributedCache` you registered.
@@ -154,7 +154,6 @@ Numbers, strings, booleans, enums, `DateTime`, `Guid`, `null` and collections of
 
 ## Limitations
 
-- **The object the method is called on is captured once.** ExpressionCache parses each lambda once and keeps the result, including the object the method is called on (`this` or `repository` in the examples above). Later calls of the same lambda reuse that object, even when they come from another instance. Use ExpressionCache in singleton services: in a scoped or transient service, `InvokeCache` and `InvokeCacheAsync` call the method on the instance that made the first call. Keys aren't affected, and argument values are read on every call.
 - **Generic methods aren't supported.** Building a key for a call to a generic method throws `ArgumentException`.
 - **The lambda must be a single method call,** such as `() => GetAsync(id, CacheAction.Bypass)`. Anything else, such as `() => GetName() ?? "none"`, throws `ArgumentException`. The arguments can be any expression.
 

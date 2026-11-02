@@ -63,8 +63,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddDistributedExpressionCache();
 
-// Your service that uses the cache (step 3). Register it as a singleton, see Limitations.
-builder.Services.AddSingleton<ProductService>();
+// Your service that uses the cache (step 3).
+builder.Services.AddScoped<ProductService>();
 ```
 
 `AddDistributedExpressionCache()` registers `IDistributedCacheService` as a singleton, unless one is already registered. It uses the `IDistributedCache` you registered.
@@ -230,7 +230,6 @@ A key contains only the parts above, so these calls share a key:
 
 ## Limitations
 
-- **The object the method is called on is captured once.** ExpressionCache parses each lambda once and keeps the result, including the object the method is called on (`this` or `repository` in the examples above). Later calls of the same lambda reuse that object, even when they come from another instance. Use ExpressionCache in singleton services: in a scoped or transient service, `InvokeCache` and `InvokeCacheAsync` call the method on the instance that made the first call. Keys aren't affected, and argument values are read on every call.
 - **Generic methods aren't supported.** Building a key for a call to a generic method throws `ArgumentException`.
 - **The lambda must be a single method call,** such as `() => GetAsync(id, CacheAction.Bypass)`. Anything else, such as `() => GetName() ?? "none"`, throws `ArgumentException`. The arguments can be any expression.
 
@@ -285,7 +284,7 @@ builder.Services.AddSingleton<IExpressionCacheBase, MemoryExpressionCache>();
 | `CacheResult<TResult>` | The result of a read. Return `CacheResult<TResult>.Failure()` on a miss, or `Success = true` with the value in `Content`. |
 | `ExpressionCacheBase` | Abstract class that implements `IExpressionCacheBase` (`GetKey`, `InvokeCache`, `InvokeCacheAsync`) on top of a provider. Subclasses get the provider from the protected `Provider` property. |
 
-`ExpressionCacheBase` is `IDisposable`. It keeps parsed expressions in an `IMemoryCache`, which it disposes when it is disposed. The constructor that takes only a provider creates that cache. The other constructor takes it as its first argument, so don't pass a cache you use for anything else.
+`ExpressionCacheBase` is `IDisposable`. It keeps the type and method part of each key in an `IMemoryCache`, which it disposes when it is disposed. The constructor that takes only a provider creates that cache. The other constructor takes it as its first argument, so don't pass a cache you use for anything else.
 
 ExpressionCache.Distributed is built the same way: see [`DistributedCacheProvider`](https://github.com/Baune8D/ExpressionCache/blob/main/src/ExpressionCache.Distributed/DistributedCacheProvider.cs) and [`DistributedCacheService`](https://github.com/Baune8D/ExpressionCache/blob/main/src/ExpressionCache.Distributed/DistributedCacheService.cs).
 

@@ -216,4 +216,30 @@ public class ExpressionCacheBaseTests(TestFunctionsFixture testFunctions) : ICla
         fixture.CacheProviderMock.Verify(m => m.GetAsync<string>(key), Times.Never);
         fixture.CacheProviderMock.Verify(m => m.SetAsync(key, result, ExpressionCacheBaseFixture.TimeSpan), Times.Never);
     }
+
+    [Fact]
+    public void InvokeCache_SameExpressionOnAnotherInstance_ShouldCallThatInstance()
+    {
+        using var fixture = new ExpressionCacheBaseFixture();
+
+        // One lambda, so both calls parse an expression with the same text
+        string Invoke(InstanceFunctions instance) =>
+            fixture.ExpressionCacheBase.InvokeCache(() => instance.LoadValue(), ExpressionCacheBaseFixture.TimeSpan, CacheAction.Bypass);
+
+        Invoke(new InstanceFunctions("first")).Should().Be("first");
+        Invoke(new InstanceFunctions("second")).Should().Be("second");
+    }
+
+    [Fact]
+    public async Task InvokeCacheAsync_SameExpressionOnAnotherInstance_ShouldCallThatInstance()
+    {
+        using var fixture = new ExpressionCacheBaseFixture();
+
+        // One lambda, so both calls parse an expression with the same text
+        Task<string> InvokeAsync(InstanceFunctions instance) =>
+            fixture.ExpressionCacheBase.InvokeCacheAsync(() => instance.LoadValueAsync(), ExpressionCacheBaseFixture.TimeSpan, CacheAction.Bypass);
+
+        (await InvokeAsync(new InstanceFunctions("first"))).Should().Be("first");
+        (await InvokeAsync(new InstanceFunctions("second"))).Should().Be("second");
+    }
 }

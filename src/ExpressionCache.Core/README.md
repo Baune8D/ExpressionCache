@@ -120,13 +120,12 @@ builder.Services.AddSingleton<IExpressionCacheBase, MemoryExpressionCache>();
 - Return `CacheResult<TResult>.Failure()` on a miss, or `Success = true` with the value in `Content`.
 - `ExpressionCacheBase` only calls `Set` and `SetAsync` with non-null values.
 - Subclasses get the provider from the protected `Provider` property.
-- `ExpressionCacheBase` is `IDisposable`. It keeps parsed expressions in an `IMemoryCache`, which it disposes when it is disposed. The constructor that takes only a provider creates that cache. The other constructor takes it as its first argument, so don't pass a cache you use for anything else.
+- `ExpressionCacheBase` is `IDisposable`. It keeps the type and method part of each key in an `IMemoryCache`, which it disposes when it is disposed. The constructor that takes only a provider creates that cache. The other constructor takes it as its first argument, so don't pass a cache you use for anything else.
 
 ExpressionCache.Distributed is built the same way: see [`DistributedCacheProvider`](https://github.com/Baune8D/ExpressionCache/blob/main/src/ExpressionCache.Distributed/DistributedCacheProvider.cs) and [`DistributedCacheService`](https://github.com/Baune8D/ExpressionCache/blob/main/src/ExpressionCache.Distributed/DistributedCacheService.cs).
 
 ## Limitations
 
-- **The object the method is called on is captured once.** `ExpressionCacheBase` parses each lambda once and keeps the result, including the object the method is called on (`this` in the example above). Later calls of the same lambda reuse that object, even when they come from another instance. Use ExpressionCache in singleton services: in a scoped or transient service, `InvokeCache` and `InvokeCacheAsync` call the method on the instance that made the first call. Keys aren't affected, and argument values are read on every call.
 - **Generic methods aren't supported.** Building a key for a call to a generic method throws `ArgumentException`.
 - **The lambda must be a single method call,** such as `() => GetAsync(id, CacheAction.Bypass)`. Anything else, such as `() => GetName() ?? "none"`, throws `ArgumentException`. The arguments can be any expression.
 
