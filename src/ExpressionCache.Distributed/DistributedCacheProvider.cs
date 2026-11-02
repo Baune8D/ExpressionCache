@@ -35,7 +35,7 @@ public class DistributedCacheProvider : IExpressionCacheProvider
         await Cache.SetStringAsync(key, JsonSerializer.Serialize(value), GetOptions(expiry)).ConfigureAwait(false);
     }
 
-    private static CacheResult<TResult> CreateCacheResult<TResult>(string entry)
+    private static CacheResult<TResult> CreateCacheResult<TResult>(string? entry)
     {
         if (entry == null)
         {

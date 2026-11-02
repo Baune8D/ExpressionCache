@@ -26,18 +26,18 @@ public interface IDistributedCacheService : IExpressionCacheBase
     Task<bool> ExistsAsync<TResult>(Expression<Func<Task<TResult>>> expression);
 
     [SuppressMessage("	Microsoft.Naming", "CA1716", Justification = "Allowed")]
-    TResult Get<TResult>(Expression<Func<TResult>> expression);
+    TResult? Get<TResult>(Expression<Func<TResult>> expression);
 
     [SuppressMessage("	Microsoft.Naming", "CA1716", Justification = "Allowed")]
-    TResult Get<TResult>(Expression<Func<Task<TResult>>> expression);
+    TResult? Get<TResult>(Expression<Func<Task<TResult>>> expression);
 
-    Task<TResult> GetAsync<TResult>(Expression<Func<TResult>> expression);
+    Task<TResult?> GetAsync<TResult>(Expression<Func<TResult>> expression);
 
-    Task<TResult> GetAsync<TResult>(Expression<Func<Task<TResult>>> expression);
+    Task<TResult?> GetAsync<TResult>(Expression<Func<Task<TResult>>> expression);
 
-    Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions);
+    Task<List<TResult?>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions);
 
-    Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions);
+    Task<List<TResult?>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions);
 
     [SuppressMessage("	Microsoft.Naming", "CA1716", Justification = "Allowed")]
     void Set<TResult, TValue>(Expression<Func<TResult>> expression, TValue value, TimeSpan expiry);

@@ -10,7 +10,7 @@ public class TestFunctionsFixture
     public string ClassName => GetType().Name;
 
     [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
-    public string NullFunctionWithoutParameters()
+    public string? NullFunctionWithoutParameters()
     {
         return null;
     }
@@ -43,9 +43,9 @@ public class TestFunctionsFixture
     }
 
     [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
-    public Task<string> NullFunctionWithoutParametersAsync()
+    public Task<string?> NullFunctionWithoutParametersAsync()
     {
-        return Task.FromResult((string)null);
+        return Task.FromResult<string?>(null);
     }
 
     [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]

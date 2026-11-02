@@ -69,7 +69,7 @@ public class DistributedCacheProviderTests
     {
         _distributedCacheProvider.Set(Key, Value, TimeSpan.FromHours(1));
 
-        var cached = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(Key));
+        var cached = JsonConvert.DeserializeObject<string>(_memoryDistributedCache.GetString(Key)!);
         cached.Should().Be(Value);
     }
 
@@ -78,7 +78,7 @@ public class DistributedCacheProviderTests
     {
         await _distributedCacheProvider.SetAsync(Key, Value, TimeSpan.FromHours(1));
 
-        var cached = JsonConvert.DeserializeObject<string>(await _memoryDistributedCache.GetStringAsync(Key, TestContext.Current.CancellationToken));
+        var cached = JsonConvert.DeserializeObject<string>((await _memoryDistributedCache.GetStringAsync(Key, TestContext.Current.CancellationToken))!);
         cached.Should().Be(Value);
     }
 }

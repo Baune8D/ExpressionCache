@@ -8,25 +8,27 @@ public sealed class ExpressionResult
 {
     private readonly int _argumentCount;
 
-    public ExpressionResult(int argumentCount, object instance, string baseCacheKey)
+    public ExpressionResult(int argumentCount, object? instance, string baseCacheKey)
     {
         _argumentCount = argumentCount;
 
         Instance = instance;
         BaseCacheKey = baseCacheKey;
 
-        Arguments = new object[_argumentCount]; // Values should not be cached
-        Method = null; // Should not be cached
-        MethodCall = null; // Should not be cached
-        CacheKey = null; // Should not be cached
+        Arguments = new object?[_argumentCount]; // Values should not be cached
+
+        // Should not be cached. ExpressionCacheBase sets them before it uses the result.
+        Method = null!;
+        MethodCall = null!;
+        CacheKey = null!;
     }
 
-    public object Instance { get; }
+    public object? Instance { get; }
 
     public string BaseCacheKey { get; }
 
     [SuppressMessage("Microsoft.Performance", "CA1819", Justification = "Needs to be modified")]
-    public object[] Arguments { get; }
+    public object?[] Arguments { get; }
 
     public MethodInfo Method { get; set; }
 

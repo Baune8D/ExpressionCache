@@ -57,32 +57,32 @@ public class DistributedCacheService : ExpressionCacheBase, IDistributedCacheSer
         return await Cache.GetAsync(GetKey(expression)).ConfigureAwait(false) != null;
     }
 
-    public TResult Get<TResult>(Expression<Func<TResult>> expression)
+    public TResult? Get<TResult>(Expression<Func<TResult>> expression)
     {
         return Provider.Get<TResult>(GetKey(expression)).Content;
     }
 
-    public TResult Get<TResult>(Expression<Func<Task<TResult>>> expression)
+    public TResult? Get<TResult>(Expression<Func<Task<TResult>>> expression)
     {
         return Provider.Get<TResult>(GetKey(expression)).Content;
     }
 
-    public async Task<TResult> GetAsync<TResult>(Expression<Func<TResult>> expression)
+    public async Task<TResult?> GetAsync<TResult>(Expression<Func<TResult>> expression)
     {
         return (await Provider.GetAsync<TResult>(GetKey(expression)).ConfigureAwait(false)).Content;
     }
 
-    public async Task<TResult> GetAsync<TResult>(Expression<Func<Task<TResult>>> expression)
+    public async Task<TResult?> GetAsync<TResult>(Expression<Func<Task<TResult>>> expression)
     {
         return (await Provider.GetAsync<TResult>(GetKey(expression)).ConfigureAwait(false)).Content;
     }
 
-    public async Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions)
+    public async Task<List<TResult?>> GetManyAsync<TResult>(IEnumerable<Expression<Func<TResult>>> expressions)
     {
         return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList()).ConfigureAwait(false);
     }
 
-    public async Task<List<TResult>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions)
+    public async Task<List<TResult?>> GetManyAsync<TResult>(IEnumerable<Expression<Func<Task<TResult>>>> expressions)
     {
         return await GetManyBaseAsync<TResult>(expressions.Select(GetKey).ToList()).ConfigureAwait(false);
     }
@@ -107,7 +107,7 @@ public class DistributedCacheService : ExpressionCacheBase, IDistributedCacheSer
         await Provider.SetAsync(GetKey(expression), value, expiry).ConfigureAwait(false);
     }
 
-    private async Task<List<TResult>> GetManyBaseAsync<TResult>(List<string> cacheKeyList)
+    private async Task<List<TResult?>> GetManyBaseAsync<TResult>(List<string> cacheKeyList)
     {
         var tasks = new List<Task<CacheResult<TResult>>>();
         cacheKeyList.ForEach(key => tasks.Add(Provider.GetAsync<TResult>(key)));

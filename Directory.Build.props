@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

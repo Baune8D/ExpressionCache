@@ -2,5 +2,5 @@
 
 public interface ICacheKeyBuilder
 {
-    ICacheKeyBuilder By(object value);
+    ICacheKeyBuilder By(object? value);
 }

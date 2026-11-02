@@ -10,7 +10,7 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
 {
     public const string CachePrefix = "ExprCache";
 
-    private IMemoryCache _internalCache;
+    private IMemoryCache? _internalCache;
 
     protected ExpressionCacheBase(IExpressionCacheProvider provider)
     {
@@ -57,11 +57,11 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
             var cachedResult = Provider.Get<TResult>(expressionResult.CacheKey);
             if (cachedResult.Success)
             {
-                return cachedResult.Content;
+                return cachedResult.Content!;
             }
         }
 
-        var computedValue = (TResult)expressionResult.Method.Invoke(expressionResult.Instance, expressionResult.Arguments);
+        var computedValue = (TResult)expressionResult.Method.Invoke(expressionResult.Instance, expressionResult.Arguments)!;
         if (cacheAction == CacheAction.Bypass)
         {
             return computedValue;
@@ -86,11 +86,11 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
             var cachedResult = await Provider.GetAsync<TResult>(expressionResult.CacheKey).ConfigureAwait(false);
             if (cachedResult.Success)
             {
-                return cachedResult.Content;
+                return cachedResult.Content!;
             }
         }
 
-        var computedValue = await ((Task<TResult>)expressionResult.Method.Invoke(expressionResult.Instance, expressionResult.Arguments)).ConfigureAwait(false);
+        var computedValue = await ((Task<TResult>)expressionResult.Method.Invoke(expressionResult.Instance, expressionResult.Arguments)!).ConfigureAwait(false);
         if (cacheAction == CacheAction.Bypass)
         {
             return computedValue;
@@ -126,7 +126,7 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
         return CachePrefix + keyBuilder;
     }
 
-    private static string GenerateCacheKey(string baseKey, object[] arguments)
+    private static string GenerateCacheKey(string baseKey, object?[] arguments)
     {
         var keyBuilder = new CacheKeyBuilder();
         foreach (var argument in arguments)
@@ -137,7 +137,7 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
         return baseKey + keyBuilder;
     }
 
-    private static object GetValue(Expression expression)
+    private static object? GetValue(Expression expression)
     {
         switch (expression.NodeType)
         {
@@ -188,9 +188,11 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
 
     private ExpressionResult GenerateBaseExpressionResult(LambdaExpression expression, MethodCallExpression methodCall, MethodInfo method)
     {
+        ObjectDisposedException.ThrowIf(_internalCache is null, this);
+
         var internalCacheKey = expression.ToString();
 
-        if (_internalCache.TryGetValue(internalCacheKey, out ExpressionResult cached))
+        if (_internalCache.TryGetValue(internalCacheKey, out ExpressionResult? cached) && cached is not null)
         {
             // Fetch result from internal cache and clone the result so we dont manipulate it in cache.
             return cached.NewBase();

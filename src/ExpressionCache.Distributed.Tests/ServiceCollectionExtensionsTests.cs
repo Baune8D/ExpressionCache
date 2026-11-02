@@ -31,7 +31,7 @@ public class ServiceCollectionExtensionsTests
     [Fact]
     public void AddDistributedExpressionCache_Null_ShouldThrowArgumentNullException()
     {
-        Action act = () => ((IServiceCollection)null).AddDistributedExpressionCache();
+        Action act = () => ((IServiceCollection)null!).AddDistributedExpressionCache();
 
         act.Should().Throw<ArgumentNullException>();
     }

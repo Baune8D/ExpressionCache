@@ -11,13 +11,13 @@ public sealed class CacheKeyBuilder : ICacheKeyBuilder
 
     private readonly StringBuilder _builder = new();
 
-    public ICacheKeyBuilder By(object value)
+    public ICacheKeyBuilder By(object? value)
     {
         DateTime? dateTimeValue;
         Guid? guidValue;
-        IConvertible convertibleValue;
-        IEnumerable enumerableValue;
-        ICacheKey cacheKeyValue;
+        IConvertible? convertibleValue;
+        IEnumerable? enumerableValue;
+        ICacheKey? cacheKeyValue;
 
         // Allow null values
         if (value == null)
