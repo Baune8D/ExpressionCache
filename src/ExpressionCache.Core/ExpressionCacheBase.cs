@@ -121,7 +121,7 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
         var keyBuilder = new CacheKeyBuilder()
             .By(methodCall.Object?.Type.Name)
             .By(methodInfo.Name)
-            .By(methodInfo.GetGenericArguments());
+            .By(methodInfo.GetGenericArguments().Select(type => type.ToString()));
 
         return CachePrefix + keyBuilder;
     }
@@ -173,7 +173,7 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
         // The same lambda can be called on different instances.
         var instance = methodCall.Object != null ? GetValue(methodCall.Object) : null;
 
-        var result = new ExpressionResult(methodCall.Arguments.Count, instance, GetBaseCacheKey(expression, methodCall, method))
+        var result = new ExpressionResult(methodCall.Arguments.Count, instance, GetBaseCacheKey(methodCall, method))
         {
             MethodCall = methodCall,
             Method = method,
@@ -191,11 +191,13 @@ public abstract class ExpressionCacheBase : IExpressionCacheBase, IDisposable
         return result;
     }
 
-    private string GetBaseCacheKey(LambdaExpression expression, MethodCallExpression methodCall, MethodInfo method)
+    private string GetBaseCacheKey(MethodCallExpression methodCall, MethodInfo method)
     {
         ObjectDisposedException.ThrowIf(_internalCache is null, this);
 
-        var internalCacheKey = expression.ToString();
+        // The base key only depends on these. The expression text would not do:
+        // it leaves out the type arguments of a generic method.
+        var internalCacheKey = (methodCall.Object?.Type, method);
 
         if (_internalCache.TryGetValue(internalCacheKey, out string? cached) && cached is not null)
         {

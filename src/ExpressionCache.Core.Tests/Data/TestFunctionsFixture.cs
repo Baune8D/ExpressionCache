@@ -43,6 +43,18 @@ public class TestFunctionsFixture
     }
 
     [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
+    public string GenericFunction<T>()
+    {
+        return ReturnResult;
+    }
+
+    [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
+    public Task<string> GenericFunctionAsync<T>()
+    {
+        return Task.FromResult(ReturnResult);
+    }
+
+    [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Testing purpose")]
     public Task<string?> NullFunctionWithoutParametersAsync()
     {
         return Task.FromResult<string?>(null);

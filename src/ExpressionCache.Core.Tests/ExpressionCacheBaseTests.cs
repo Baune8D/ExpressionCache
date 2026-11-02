@@ -66,6 +66,28 @@ public class ExpressionCacheBaseTests(TestFunctionsFixture testFunctions) : ICla
     }
 
     [Fact]
+    public void GetKey_GenericFunction_ShouldIncludeTypeArguments()
+    {
+        using var fixture = new ExpressionCacheBaseFixture();
+        var intKey = fixture.ExpressionCacheBase.GetKey(() => testFunctions.GenericFunction<int>());
+        var stringKey = fixture.ExpressionCacheBase.GetKey(() => testFunctions.GenericFunction<string>());
+        var asyncKey = fixture.ExpressionCacheBase.GetKey(() => testFunctions.GenericFunctionAsync<int>());
+
+        intKey.Should().Be(CacheKeyHelper.Prefix(
+            CacheKeyHelper.Format(testFunctions.ClassName) +
+            CacheKeyHelper.Format(nameof(testFunctions.GenericFunction)) +
+            CacheKeyHelper.Format("System.Int32")));
+        stringKey.Should().Be(CacheKeyHelper.Prefix(
+            CacheKeyHelper.Format(testFunctions.ClassName) +
+            CacheKeyHelper.Format(nameof(testFunctions.GenericFunction)) +
+            CacheKeyHelper.Format("System.String")));
+        asyncKey.Should().Be(CacheKeyHelper.Prefix(
+            CacheKeyHelper.Format(testFunctions.ClassName) +
+            CacheKeyHelper.Format(nameof(testFunctions.GenericFunctionAsync)) +
+            CacheKeyHelper.Format("System.Int32")));
+    }
+
+    [Fact]
     public void GetKey_NonFunction_ShouldThrowArgumentException()
     {
         var act = () =>

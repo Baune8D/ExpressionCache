@@ -34,7 +34,8 @@ A key is `ExprCache` followed by one `{...}` part for each of these:
 
 1. The type of the object the method is called on, without its namespace. This is the type of the expression in your code: `this` gives the class, a variable declared as an interface gives the interface. A static method has no object, so this part is `{0x6e756c6c}`.
 2. The method name.
-3. Each argument value, in order.
+3. For a generic method, each type argument, with its namespace: `Find<Product>()` adds `{MyApp.Product}`.
+4. Each argument value, in order.
 
 Argument values are converted as follows. The checks run in this order:
 
@@ -126,7 +127,6 @@ ExpressionCache.Distributed is built the same way: see [`DistributedCacheProvide
 
 ## Limitations
 
-- **Generic methods aren't supported.** Building a key for a call to a generic method throws `ArgumentException`.
 - **The lambda must be a single method call,** such as `() => GetAsync(id, CacheAction.Bypass)`. Anything else, such as `() => GetName() ?? "none"`, throws `ArgumentException`. The arguments can be any expression.
 
 ## License

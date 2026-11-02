@@ -154,7 +154,6 @@ Numbers, strings, booleans, enums, `DateTime`, `Guid`, `null` and collections of
 
 ## Limitations
 
-- **Generic methods aren't supported.** Building a key for a call to a generic method throws `ArgumentException`.
 - **The lambda must be a single method call,** such as `() => GetAsync(id, CacheAction.Bypass)`. Anything else, such as `() => GetName() ?? "none"`, throws `ArgumentException`. The arguments can be any expression.
 
 ## License
