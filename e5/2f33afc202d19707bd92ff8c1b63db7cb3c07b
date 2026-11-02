@@ -1,0 +1,21 @@
+src/ExpressionCache.Core/ExpressionCache.Core.csproj
+  s_1da20591e67452::t_762040a937b4cb 11,13
+src/ExpressionCache.Distributed/ExpressionCache.Distributed.csproj
+  s_1da20591e67452::t_cd9c6448be4a01 11,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e52f33afc202d19707bd92ff8c1b63db7cb3c07b",
+  "prompts": {},
+  "sessions": {
+    "s_1da20591e67452": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56de8afb-cd13-4b9c-b07e-fc995dbca6f0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
