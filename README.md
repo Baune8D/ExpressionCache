@@ -1,17 +1,19 @@
 # ExpressionCache
-[![Build status](https://ci.appveyor.com/api/projects/status/0abskdimkpe1m558?svg=true)](https://ci.appveyor.com/project/Baune8D/expressioncache)
-[![codecov](https://codecov.io/gh/Baune8D/expressioncache/branch/main/graph/badge.svg)](https://codecov.io/gh/Baune8D/expressioncache)
 
-| Package                     | Version                                                                                                                                 |
-| ----------------------------|:---------------------------------------------------------------------------------------------------------------------------------------:|
-| ExpressionCache.Core        | [![NuGet Badge](https://buildstats.info/nuget/ExpressionCache.Core)](https://www.nuget.org/packages/ExpressionCache.Core)               |
-| ExpressionCache.Distributed | [![NuGet Badge](https://buildstats.info/nuget/ExpressionCache.Distributed)](https://www.nuget.org/packages/ExpressionCache.Distributed) |
+[![Build](https://github.com/Baune8D/ExpressionCache/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/Baune8D/ExpressionCache/actions/workflows/pipeline.yml)
+[![codecov](https://codecov.io/gh/Baune8D/ExpressionCache/branch/main/graph/badge.svg)](https://codecov.io/gh/Baune8D/ExpressionCache)
+[![License: MIT](https://img.shields.io/github/license/Baune8D/ExpressionCache)](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE.txt)
 
-**Dev feed:** [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)  
+| Package | Version | Downloads |
+| --- | --- | --- |
+| ExpressionCache.Core | [![NuGet Version](https://img.shields.io/nuget/v/ExpressionCache.Core)](https://www.nuget.org/packages/ExpressionCache.Core) | [![NuGet Downloads](https://img.shields.io/nuget/dt/ExpressionCache.Core)](https://www.nuget.org/packages/ExpressionCache.Core) |
+| ExpressionCache.Distributed | [![NuGet Version](https://img.shields.io/nuget/v/ExpressionCache.Distributed)](https://www.nuget.org/packages/ExpressionCache.Distributed) | [![NuGet Downloads](https://img.shields.io/nuget/dt/ExpressionCache.Distributed)](https://www.nuget.org/packages/ExpressionCache.Distributed) |
+
+**MyGet development feed:** [https://www.myget.org/F/baunegaard/api/v3/index.json](https://www.myget.org/F/baunegaard/api/v3/index.json)  
 
 ## Table of Contents
-1. [ExpressionCache.Core](#expressionCache.core)
-2. [ExpressionCache.Distributed](#expressionCache.distributed)
+1. [ExpressionCache.Core](#expressioncachecore)
+2. [ExpressionCache.Distributed](#expressioncachedistributed)
 
 ## ExpressionCache.Core
 
@@ -201,3 +203,15 @@ public interface IDistributedCacheService : IExpressionCacheBase
     Task SetAsync<TResult, TValue>(Expression<Func<Task<TResult>>> expression, TValue value, TimeSpan expiry);
 }
 ```
+
+## Building from source
+
+The build uses [NUKE](https://nuke.build/):
+
+```bash
+./build.sh Test        # Windows: .\build.cmd Test
+```
+
+## License
+
+[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE.txt)
