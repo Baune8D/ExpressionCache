@@ -1,0 +1,43 @@
+Directory.Build.props
+  s_1da20591e67452::t_5996e1f6a862ff 4
+src/ExpressionCache.Core.Tests/Data/NonCacheableObject.cs
+  s_1da20591e67452::t_ccdc7d60869be3 7
+src/ExpressionCache.Core.Tests/Data/TestFunctionsFixture.cs
+  s_1da20591e67452::t_5e857d9dd066e2 13,46,48
+src/ExpressionCache.Core/CacheKeyBuilder.cs
+  s_1da20591e67452::t_80e804814053f0 14,18-20
+src/ExpressionCache.Core/CacheResult.cs
+  s_1da20591e67452::t_76f7be2746aec2 7-8
+src/ExpressionCache.Core/ExpressionCacheBase.cs
+  s_1da20591e67452::t_edf03a9f75e64c 13,60,64,89,93,129,140,191-192,195
+src/ExpressionCache.Core/ExpressionResult.cs
+  s_1da20591e67452::t_0daf25ffa26ca2 11,18-23,26,31
+src/ExpressionCache.Core/ICacheKeyBuilder.cs
+  s_1da20591e67452::t_131779f7e7ad60 5
+src/ExpressionCache.Distributed.Tests/DistributedCacheProviderTests.cs
+  s_1da20591e67452::t_a63c1c214d1c85 72,81
+src/ExpressionCache.Distributed.Tests/ServiceCollectionExtensionsTests.cs
+  s_1da20591e67452::t_6598d9d20a648d 34
+src/ExpressionCache.Distributed/DistributedCacheProvider.cs
+  s_1da20591e67452::t_0f818934f4be92 38
+src/ExpressionCache.Distributed/DistributedCacheService.cs
+  s_1da20591e67452::t_3f804891fddafa 60,65,70,75,80,85,110
+src/ExpressionCache.Distributed/IDistributedCacheService.cs
+  s_1da20591e67452::t_6acb70cb934597 29,32,34,36,38,40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5317b9479cbf13d6cf425c2cc7277fceeb860e7f",
+  "prompts": {},
+  "sessions": {
+    "s_1da20591e67452": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56de8afb-cd13-4b9c-b07e-fc995dbca6f0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
