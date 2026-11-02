@@ -1,0 +1,29 @@
+README.md
+  s_1da20591e67452::t_85708a78cb4ebc 66-67,287
+src/ExpressionCache.Core.Tests/Data/InstanceFunctions.cs
+  s_1da20591e67452::t_b88464f0fe5c65 1-16
+src/ExpressionCache.Core.Tests/ExpressionCacheBaseTests.cs
+  s_1da20591e67452::t_389f30481e62e4 219-244
+src/ExpressionCache.Core/ExpressionCacheBase.cs
+  s_1da20591e67452::t_5c93220c6006b8 172-180,194,200,202,207-208,213
+src/ExpressionCache.Core/README.md
+  s_1da20591e67452::t_5159fdc16dbd57 123
+src/ExpressionCache.Distributed/README.md
+  s_1da20591e67452::t_06158ed945e64c 45-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "225f018c09c4f3e1d897b5471fcb35fb92a9bfb8",
+  "prompts": {},
+  "sessions": {
+    "s_1da20591e67452": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56de8afb-cd13-4b9c-b07e-fc995dbca6f0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
