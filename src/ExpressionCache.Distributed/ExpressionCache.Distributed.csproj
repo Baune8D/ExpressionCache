@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-    <Authors>Morten Larsen</Authors>
+    <Authors>Baune8D</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>ExpressionCache service for IDistributedCache interface.</Description>
     <RepositoryType>git</RepositoryType>
