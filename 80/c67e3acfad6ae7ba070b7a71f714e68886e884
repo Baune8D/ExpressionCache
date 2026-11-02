@@ -1,0 +1,21 @@
+.gitattributes
+  s_1da20591e67452::t_f8f4fdf0b52e6a 1-2
+.gitignore
+  s_1da20591e67452::t_8f8f2247c30e63 12,25-39,43,46,50-55,67,74-76,103,111-112,184,343,347,350,353,357-358,380-383,389,392,404,415,420-422,430-445,453,486-493,518,526,528,533-536,539,541,543-549,551-552,554-681,724
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "80c67e3acfad6ae7ba070b7a71f714e68886e884",
+  "prompts": {},
+  "sessions": {
+    "s_1da20591e67452": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56de8afb-cd13-4b9c-b07e-fc995dbca6f0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
