@@ -131,4 +131,4 @@ ExpressionCache.Distributed is built the same way: see [`DistributedCacheProvide
 
 ## License
 
-[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE.txt)
+[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE)

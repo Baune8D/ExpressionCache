@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Baune8D/ExpressionCache/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/Baune8D/ExpressionCache/actions/workflows/pipeline.yml)
 [![codecov](https://codecov.io/gh/Baune8D/ExpressionCache/branch/main/graph/badge.svg)](https://codecov.io/gh/Baune8D/ExpressionCache)
-[![License: MIT](https://img.shields.io/github/license/Baune8D/ExpressionCache)](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE.txt)
+[![License: MIT](https://img.shields.io/github/license/Baune8D/ExpressionCache)](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE)
 
 | Package | Version | Downloads |
 | --- | --- | --- |
@@ -298,4 +298,4 @@ The build uses [NUKE](https://nuke.build/):
 
 ## License
 
-[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE.txt)
+[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE)

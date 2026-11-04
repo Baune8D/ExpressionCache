@@ -158,4 +158,4 @@ Numbers, strings, booleans, enums, `DateTime`, `Guid`, `null` and collections of
 
 ## License
 
-[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE.txt)
+[MIT](https://github.com/Baune8D/ExpressionCache/blob/main/LICENSE)
